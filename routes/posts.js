@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
     try {
         const savedPost = await newPost.save();
         res.status(200).json(savedPost)
-    } catch(err) {
+    } catch (err) {
         res.status(500).json(err)
     }
 })
@@ -22,9 +22,11 @@ router.put('/:id', async (req, res) => {
         // check if current user posted the message
         if (post.userId === req.body.userId) {
             // if yes, update message
-            await post.updateOne({$set: req.body});
+            await post.updateOne({
+                $set: req.body
+            });
             res.status(200).json("Your post has been updated")
-        } else { 
+        } else {
             res.status(403).json("You can updated only your posts")
         }
     } catch (err) {
@@ -42,7 +44,7 @@ router.delete('/:id', async (req, res) => {
             // if yes, delete message
             await post.deleteOne();
             res.status(200).json("Your post has been deleted")
-        } else { 
+        } else {
             res.status(403).json("You can delete only your posts")
         }
     } catch (err) {
@@ -58,10 +60,18 @@ router.put("/:id/like", async (req, res) => {
         // check if current user does not already liked the post
         if (!post.likes.includes(req.body.userId)) {
             // if not already liked, push current user id in the posts' likes
-            await post.updateOne({$push:{likes:req.body.userId}});
+            await post.updateOne({
+                $push: {
+                    likes: req.body.userId
+                }
+            });
             res.status(200).json("The post has been liked.")
         } else { // if already liked, dislike the post
-            await post.updateOne({$pull:{likes:req.body.userId}})
+            await post.updateOne({
+                $pull: {
+                    likes: req.body.userId
+                }
+            })
             res.status(200).json("The post has been disliked.")
         }
     } catch (err) {
@@ -86,26 +96,26 @@ router.get("/timeline/all", async (req, res) => {
         // find correct user id
         const currentUser = await User.findById(req.body.userId);
         // fetch all current user's posts
-        const userPosts = await Post.find({ userId: currentUser._id });
+        const userPosts = await Post.find({
+            userId: currentUser._id
+        });
         // fetch all followings' posts
         const friendPosts = await Promise.all(
-        currentUser.following.map((friendId) => {
-          return Post.find({ userId: friendId });
-        })
-      );
-      res.json(userPosts.concat(...friendPosts))
+            currentUser.following.map((friendId) => {
+                return Post.find({
+                    userId: friendId
+                })
+            })
+        );
+        res.json(userPosts.concat(...friendPosts));
     } catch (err) {
-      res.status(500).json(err);
+        res.status(500).json(err);
     }
 });
 
 
 // comment post
 router.post('/comment-post/:id', async (req, res) => {
-    // check if post id exist
-    if (!ObjectID.isValid(req.params.id)) {
-        return res.status(400).send('ID unknown :' + req.params.id)
-    }
     try {
         return Post.findByIdAndUpdate(req.params.id, {
             $push: {
@@ -116,40 +126,57 @@ router.post('/comment-post/:id', async (req, res) => {
                     timestamp: new Date().getTime(),
                 }
             }
+        }, {
+            new: true
         },
-        { new: true },
         (err, docs) => {
             if (!err) {
                 res.send(docs);
             } else {
                 return res.status(400).send(err);
-            }  
+            }
         });
     } catch (err) {
         return res.status(400).send(err);
     };
 })
 
-// edit comment
-router.put('/edit-comment-post/:id', async (req, res) => {
+
+router.delete('/delete-comment-post/:id', async (req, res) => {
     try {
-        // find the comment
-        const post = await Post.findById(req.params.id);
-        const comment = await docs.comments.find((comment) => 
-            comment._id.equals(req.body.commentId))
-        // check if current user posted the message
-        if (comment._id === req.body.commentId) {
-            // if yes, update message
-            await comment.updateOne({$set: req.body.text});
-            res.status(200).json("Your comment has been updated")
-        } else { 
-            res.status(403).json("You can updated only your comment")
+        // find post
+        const post = await Post.findByIdAndUpdate(req.params.id);
+        // get comment id from the request
+        const TheComment = req.body.commentId;
+        console.log(post, TheComment)
+        // récupère champs comment du post, and filter to only keep the one comment to delete. valueOf to recupérer valeur de l'objectid en string
+        const currentComment = post.comments.filter((comment) => TheComment === comment._id.valueOf())[0];
+        // check if empty
+        if (currentComment.length) {
+            // if not, pull the comment
+            await Post.findByIdAndUpdate(req.params.id, {
+                $pull: {
+                    comments: {
+                        _id: currentComment._id,
+                    }
+                }
+            });
+            res.status(200).json("The comment has been deleted.")
+        } else {
+            res.status(500).json('The comment does not exist.')
+        }
+        (err, docs) => {
+            if (!err) { 
+                return res.send(docs);
+            } else {
+              return res.status(400).send(err);
+            }
         }
     } catch (err) {
-        res.status(500).json(err)
+        return res.status(400).send(err);
     }
-})
+});
 
 
-// delete comment
+
 module.exports = router;
