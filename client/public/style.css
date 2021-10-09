@@ -1,0 +1,15 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+:root {
+    --pale-pink-color: #fef5e9;
+    --blue-color: #2ec4b6;
+    --pale-blue-color: #cbf3f0;
+    --orange-color:#ffbf69;
+    --grey-color:#707070;
+    --dark-color:#2c2b2b;
+    --white-color: #ffffff;
+}

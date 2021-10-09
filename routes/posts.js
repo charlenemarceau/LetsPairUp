@@ -163,7 +163,7 @@ router.delete('/delete-comment-post/:id', async (req, res) => {
             });
             res.status(200).json("The comment has been deleted.")
         } else {
-            res.status(500).json('The comment does not exist.')
+            res.status(500).send(err)
         }
         (err, docs) => {
             if (!err) { 
