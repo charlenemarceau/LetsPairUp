@@ -141,7 +141,7 @@ router.post('/comment-post/:id', async (req, res) => {
     };
 })
 
-
+// delete comment
 router.delete('/delete-comment-post/:id', async (req, res) => {
     try {
         // find post
@@ -149,11 +149,11 @@ router.delete('/delete-comment-post/:id', async (req, res) => {
         // get comment id from the request
         const TheComment = req.body.commentId;
         console.log(post, TheComment)
-        // récupère champs comment du post, and filter to only keep the one comment to delete. valueOf to recupérer valeur de l'objectid en string
+        // get comment from post and filter to only keep the one comment to delete. valueOf to get the value of the object id in string
         const currentComment = post.comments.filter((comment) => TheComment === comment._id.valueOf())[0];
         // check if empty
         if (currentComment.length) {
-            // if not, pull the comment
+            // if not, pull the comment from the data
             await Post.findByIdAndUpdate(req.params.id, {
                 $pull: {
                     comments: {
