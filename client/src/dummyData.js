@@ -1,32 +1,32 @@
 export const Users = [
     {
         id:1,
-        profilePicture: "/assets/sf-pic.jpeg",
+        profilePicture: "sf-pic.jpeg",
         username: "Jane"
     },
     {
         id:2,
-        profilePicture: "/assets/random-user.jpg",
+        profilePicture: "random-user.jpg",
         username: "Ashley"
     },{
         id:3,
-        profilePicture: "/assets/sf-pic.jpeg",
+        profilePicture: "sf-pic.jpeg",
         username: "Marie"
     },{
         id:4,
-        profilePicture: "/assets/random-user.jpg",
+        profilePicture: "random-user.jpg",
         username: "Julien"
     },{
         id:5,
-        profilePicture: "/assets/random-user.jpg",
+        profilePicture: "random-user.jpg",
         username: "Lucas"
     },{
         id:6,
-        profilePicture: "/assets/random-user.jpg",
+        profilePicture: "random-user.jpg",
         username: "Pauline"
     },{
         id:7,
-        profilePicture: "/assets/random-user.jpg",
+        profilePicture: "random-user.jpg",
         username: "Floraine"
     },
 ]
@@ -43,7 +43,7 @@ export const Posts = [
     {
         id: 2,
         message: "Vive SF",
-        image: "/assets/sf-pic.jpeg",
+        image: "/sf-pic.jpeg",
         date:"15 mins ago",
         userId: 3,
         like: 3,
@@ -57,7 +57,7 @@ export const Posts = [
         comment: 9,
     },{
         id: 4,
-        image: "/assets/sf-pic.jpeg",
+        image: "/sf-pic.jpeg",
         date:"5 mins ago",
         userId: 7,
         like: 32,

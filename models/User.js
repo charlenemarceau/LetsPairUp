@@ -37,6 +37,14 @@ const UserSchema = new mongoose.Schema(
             type: String,
             required:true,
         },
+        from: {
+            type: String,
+            required:true,
+            default: "France"
+        },
+        arrivedDate: {
+            type: Date,
+        },
         bio: {
             type: String,
             max: 1000,

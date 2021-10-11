@@ -1,6 +1,20 @@
 import "./login.css";
+import {useRef, useContext} from 'react';
+import {loginCall} from "../../apiCalls";
+import {AuthContext} from '../../context/AuthContext';
+import {CircularProgress} from '@material-ui/core';
 
 export default function Login() {
+  const email = useRef();
+  const password = useRef();
+  const { user, isFetching, error, dispatch } = useContext(AuthContext)
+
+
+  const handleClick = (e) => {
+    e.preventDefault()
+    loginCall({email:email.current.value, password:password.current.value}, dispatch);
+  };
+  
   return (
     <div className="login">
           {/* <div className="AppName">
@@ -14,15 +28,15 @@ export default function Login() {
           </span>
         </div>
         <div className="loginRight">
-          <div className="loginBox">
-            <input placeholder="Email" className="loginInput" />
-            <input placeholder="Password" className="loginInput" />
-            <button className="loginButton">Se connecter</button>
+          <form className="loginBox" onSubmit={handleClick}>
+            <input placeholder="Email" type="email" required className="loginInput" ref={email}/>
+            <input placeholder="Password" type="password" required minLength="6" className="loginInput" ref={password}/>
+            <button className="loginButton"type="submit" disabled={isFetching}>{isFetching ? (<CircularProgress color="white" size="18px"/> ): ("Se connecter")}</button>
             <span className="loginForgot">Mot de passe oublié ?</span>
             <button className="loginRegisterButton">
-              Crée un compte
+            {isFetching ? (<CircularProgress color="white" size="18px"/> ): ("Crée un compte")}
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>

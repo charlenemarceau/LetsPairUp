@@ -1,14 +1,16 @@
 import React from 'react';
 import "./topbar.css"
 import {Search, AccountCircleOutlined, ChatOutlined, Notifications} from '@material-ui/icons';
-
+import {Link} from "react-router-dom";
 
 function Topbar() {
     return (
         <div className='topbarContainer'>
             <div className="topbarLeft">
                 <img className="logoImg" src="/assets/logo-letspairup.png" alt="" />
-                <span className="logo">Let's Pair Up</span>
+                <Link to="/" style={{textDecoration:"none"}}>
+                  <span className="logo">Let's Pair Up</span>
+                </Link>
             </div>
             <div className="topbarCenter">
                 <div className="searchbar">
