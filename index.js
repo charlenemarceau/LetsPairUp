@@ -8,6 +8,8 @@ const morgan = require("morgan");
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
+const multer = require('multer');
+const path = require ('path');
 
 dotenv.config();
 
@@ -15,6 +17,32 @@ dotenv.config();
 app.use(express.json());
 app.use(helmet());
 app.use(morgan('common'));
+
+// multer 
+// instauring destination path
+//The folder to which the file has been saved
+//	The name of the file within the destination
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, req.body.name);
+  },
+});
+  
+  const upload = multer({ storage });
+  // upload our file automatically
+  app.post("/api/upload", upload.single("file"), (req, res) => {
+    try {
+      return res.status(200).json("File uploded successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+// path
+app.use('/images', express.static(path.join(__dirname, "public/images")));
 
 // routes
 app.use("/api/users", userRoute);

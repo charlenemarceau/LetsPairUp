@@ -32,11 +32,7 @@ export default function Profile() {
           <div className="profileRightTop">
             <div className="profileCover">
               <div className="profileCoverImg">
-              <img className="profileUserImg" src={
-                  user.avatar
-                    ? PF + user.avatar
-                    : PF + "person/random-user.jpg"
-                } alt=""/>
+              <img className="profileUserImg" src={user.avatar ? PF + user.avatar : PF + "random-user.jpg"} alt=""/>
             <div className="profileInfo">
                 <h4 className="profileInfoName">{user.username}</h4>
                 <span className="profileInfoDesc">{user.bio}</span>

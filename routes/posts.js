@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Post = require("../models/Post");
 const User = require("../models/User");
-const ObjectID = require('mongoose').Types.ObjectId;
 
 // create a post
 router.post('/', async (req, res) => {

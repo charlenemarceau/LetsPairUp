@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const User = require ('../models/User');
 const bcrypt = require('bcrypt'); //to hash and crypt the password
+const mongoose = require('mongoose');
+
 
 
 // update user
@@ -60,6 +62,38 @@ router.get("/", async (req, res) => {
       res.status(500).json(err);
     }
 });
+
+// get friends
+router.get("/friends/:userId", async (req, res) => {
+    try {
+        // fetch user
+        const user = await User.findById(req.params.userId);
+        // fetch user's friends
+        const friends = await Promise.all(
+            user.following.map((friendId) => {
+            // because of an error in console
+            // to avoid an error, if friendId equals "", return nothing and continue to map
+            if (friendId === "") return;
+              return User.findById(friendId);
+            })
+        );
+        // set a friendList table
+        let friendList = [];
+        // map all friends and fetch only their ids, username and avatar 
+        friends.map((friend) => {
+          // because of an error in console
+          // to avoid an error, if no friend, return nothing and continue to map
+          if (!friend ) return;
+          const { _id, username, avatar } = friend;
+          // push infos in friendList
+          friendList.push({ _id, username, avatar });
+        });
+        res.status(200).json(friendList)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err);
+    }
+  });
 
 // follow a user
 router.put('/:id/follow', async (req, res) => {

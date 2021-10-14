@@ -73,7 +73,7 @@
 
 .postCommentText{
     cursor: pointer;
-    font-size: 15px;
+    font-size: 13px;
 }
 .postCommentText:hover{
     border-bottom: 1px solid var(--blue-color);

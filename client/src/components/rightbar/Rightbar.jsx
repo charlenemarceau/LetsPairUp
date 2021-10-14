@@ -1,36 +1,80 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './rightbar.css';
 import { Users } from "../../dummyData";
 import Online from '../online/Online';
 import { dateParser } from '../../Utils';
+import axios from "axios";
+import {Link} from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
+import { AddCircle, RemoveCircle } from '@material-ui/icons';
 
 
 export default function Rightbar({ user }) {
-    const HomeRightbar = () => {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+    const { user:currentUser, dispatch} = useContext(AuthContext);
+    const [isFollowed, setIsFollowed] = useState(currentUser.following.includes(user?._id));
+    const [friends, setFriends] = useState([]);
 
-      return (
-        <>
-          <div className="birthdayContainer">
-            <img className="birthdayImg" src="assets/random-user.jpg" alt="" />
-            <span className="birthdayText">
-              <b>Stef Deluca</b> et <b>4 autres</b> fêtent leurs anniversaires aujourd'hui
-            </span>
-          </div>
-          <h4 className="rightbarTitle">Amies en ligne</h4>
-          <ul className="rightbarFriendList">
-            {Users.map((u) => (
-              <Online key={u.id} user={u} />
-            ))}
-          </ul>
-        </>
-      );
+    useEffect(() => {
+        const getFriends = async () => {
+          try {
+              const friendList = await axios.get("/users/friends/" + user._id);
+              setFriends(friendList.data);
+          } catch (err) {
+            console.log(err)
+          }
+      }
+      getFriends();
+    }, [user])
+
+    const handleFollow = async () => {
+      try {
+        if (isFollowed) {
+          await axios.put(`/users/${user._id}/unfollow`, {
+            userId: currentUser._id,
+          });
+          dispatch({ type: "UNFOLLOW", payload: user._id });
+        } else {
+          await axios.put(`/users/${user._id}/follow`, {
+            userId: currentUser._id,
+          });
+          dispatch({ type: "FOLLOW", payload: user._id });
+        }
+        setIsFollowed(!isFollowed);
+      } catch (err) {
+      }
+    };
+
+
+    const HomeRightbar = () => {
+    return (
+      <>
+        <div className="birthdayContainer">
+          <img className="birthdayImg" src="assets/random-user.jpg" alt="" />
+          <span className="birthdayText">
+            <b>Stef Deluca</b> et <b>4 autres</b> fêtent leurs anniversaires aujourd'hui
+          </span>
+        </div>
+        <h4 className="rightbarTitle">Amies en ligne</h4>
+        <ul className="rightbarFriendList">
+          {Users.map((u, i) => (
+            <Online key={i} user={u} />
+          ))}
+        </ul>
+      </>
+    );
 }
 
 const ProfileRightbar = () => {
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
     return (
       <>
+      {user.username !== currentUser.username && (
+        <button className="rightbarFollowButton" onClick={handleFollow}>
+          {isFollowed ? "Ne plus suivre" : "Suivre"}
+          {isFollowed ? < RemoveCircle /> : < AddCircle />}
+        </button>
+      )}
         <h4 className="rightbarTitle">Informations</h4>
         <div className="rightbarInfo">
           <div className="rightbarInfoItem">
@@ -46,56 +90,16 @@ const ProfileRightbar = () => {
             <span className="rightbarInfoValue">{ dateParser(user.arrivedDate)}</span>
           </div>
         </div>
-        <h4 className="rightbarTitle">User friends</h4>
+        <h4 className="rightbarTitle">Abonnements</h4>
         <div className="rightbarFollowings">
+            {friends.map((friend) => (
           <div className="rightbarFollowing">
-            <img
-              src={`${PF}random-user.jpg`}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
+            <Link to={`/profile/${friend.username}`}>
+            <img src={friend.avatar ? PF+friend.avatar : PF + "random-user.jpg"} alt="" className="rightbarFollowingImg" />
+            </ Link >
+            <span className="rightbarFollowingName">{friend.username}</span>
           </div>
-          <div className="rightbarFollowing">
-            <img
-              src={`${PF}random-user.jpg`}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src={`${PF}random-user.jpg`}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src={`${PF}random-user.jpg`}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src={`${PF}random-user.jpg`}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src={`${PF}random-user.jpg`}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
+            ))}
         </div>
       </>
     );
