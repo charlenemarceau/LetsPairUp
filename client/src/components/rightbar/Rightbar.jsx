@@ -12,7 +12,7 @@ import { AddCircle, RemoveCircle } from '@material-ui/icons';
 export default function Rightbar({ user }) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const { user:currentUser, dispatch} = useContext(AuthContext);
-    const [isFollowed, setIsFollowed] = useState(currentUser.following.includes(user?._id));
+    const [isFollowed, setIsFollowed] = useState(currentUser.following?.includes(user?._id));
     const [friends, setFriends] = useState([]);
 
     useEffect(() => {

@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require ('../models/User');
 const bcrypt = require('bcrypt'); //to hash and crypt the password
 const mongoose = require('mongoose');
+const { checkUser } = require("../middleware/auth.middleware");
 
 
 
@@ -53,12 +54,15 @@ router.get("/", async (req, res) => {
     const userId = req.query.userId;
     const username = req.query.username;
     try {
+        console.log(userId, username)
         // if userId, search for a user with the id, if not search for the user with username
         const user = userId ? await User.findById(userId) : await User.findOne({username:username});
         // to not render password and updated at
         const { password, updatedAt, ...other } = user._doc;
+        console.log(user);
         res.status(200).json(other);
     } catch (err) {
+        console.log(err)
       res.status(500).json(err);
     }
 });

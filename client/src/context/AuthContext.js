@@ -4,17 +4,17 @@ import AuthReducer from "./AuthReducer";
 // initial state
 const INITIAL_STATE = {
     // not login at the beginning
-    user: {
-        _id:"6165b032ed08218361a5464d",
-        username:"Charlène",
-        email:"charlenemarceau@hotmail.fr",
-        avatar:"avatar.jpeg",
-        age:26,
-        city:"San Francisco",
-        from:"France",
-        followers: [],
-        following:[],
-    },
+    user: null
+        // {_id:"6165b032ed08218361a5464d",
+        // username:"Charlène",
+        // email:"charlenemarceau@hotmail.fr",
+        // avatar:"avatar.jpeg",
+        // age:26,
+        // city:"San Francisco",
+        // from:"France",
+        // followers: [],
+        // following:[],}
+    ,
     // decide the beginning and ending. So false first
     isFetching: false,
     // no error at the beginning

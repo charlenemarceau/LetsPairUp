@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import "./share.css";
-import { LocationOnOutlined, PermMediaOutlined, CloseOutlined, CancelOutlined} from '@material-ui/icons';
+import { LocationOnOutlined, PermMediaOutlined, CancelOutlined} from '@material-ui/icons';
 import {AuthContext} from "../../context/AuthContext";
 import axios from "axios";
 

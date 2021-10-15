@@ -4,12 +4,15 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const cookieParser = require('cookie-parser');
 
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
+const {checkUser, requireAuth} = require('./middleware/auth.middleware');
 const multer = require('multer');
 const path = require ('path');
+const jwt = require ("jsonwebtoken");
 
 dotenv.config();
 
@@ -17,6 +20,13 @@ dotenv.config();
 app.use(express.json());
 app.use(helmet());
 app.use(morgan('common'));
+app.use(cookieParser());
+
+//JWT
+app.get('*', checkUser);
+app.get('/jwtid', requireAuth, (req, res) => {
+  res.status(200).send(res.locals.user._id)
+})
 
 // multer 
 // instauring destination path
@@ -31,15 +41,15 @@ const storage = multer.diskStorage({
   },
 });
   
-  const upload = multer({ storage });
-  // upload our file automatically
-  app.post("/api/upload", upload.single("file"), (req, res) => {
-    try {
-      return res.status(200).json("File uploded successfully");
-    } catch (error) {
-      console.error(error);
-    }
-  });
+const upload = multer({ storage });
+// upload our file automatically
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  try {
+    return res.status(200).json("File uploded successfully");
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 // path
 app.use('/images', express.static(path.join(__dirname, "public/images")));
@@ -48,6 +58,7 @@ app.use('/images', express.static(path.join(__dirname, "public/images")));
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
+  
 
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
