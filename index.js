@@ -5,28 +5,46 @@ const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
-const {checkUser, requireAuth} = require('./middleware/auth.middleware');
+const pinRoute = require("./routes/pins");
+const questionRoute = require("./routes/questions");
 const multer = require('multer');
 const path = require ('path');
-const jwt = require ("jsonwebtoken");
+// const jwt = require ("jsonwebtoken");
+var bodyParser = require('body-parser')
 
 dotenv.config();
+
+// cors
+const corsOptions = {
+  origin: process.env.CLIENT_URL,
+  credentials: true,
+  'allowedHeaders': ['sessionId', 'Content-Type'],
+  'exposedHeaders': ['sessionId'],
+  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  'preflightContinue': false
+}
+app.use(
+  cors((corsOptions))
+);
 
 //middleware
 app.use(express.json());
 app.use(helmet());
 app.use(morgan('common'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
-//JWT
-app.get('*', checkUser);
-app.get('/jwtid', requireAuth, (req, res) => {
-  res.status(200).send(res.locals.user._id)
-})
+// //JWT
+// app.get('*', checkUser);
+// app.get('/jwtid', requireAuth, (req, res) => {
+//   res.status(200).send(res.locals.user._id)
+// })
 
 // multer 
 // instauring destination path
@@ -58,7 +76,8 @@ app.use('/images', express.static(path.join(__dirname, "public/images")));
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
-  
+app.use("/api/pins", pinRoute);
+app.use("/api/questions", questionRoute);  
 
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,

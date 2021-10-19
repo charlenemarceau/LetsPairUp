@@ -26,8 +26,8 @@ export default function Feed({username}) {
     }, [username, user._id])
 
     return (
-        <div className='feed'>
-            <div className="feedWrapper" >
+        <div className='questionFeed'>
+            <div className="questionFeedWrapper" >
                 {/* if in user profile, the share component will be visible. If not user profile not visible */}
                 {(!username || username === user.username) && <Share />}
                 {posts.map((p, i) => (

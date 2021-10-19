@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import "./topbar.css"
-import {Search, AccountCircleOutlined, ChatOutlined, Notifications} from '@material-ui/icons';
+import {Search, AccountCircleOutlined, ChatOutlined, Notifications, ExitToAppOutlined} from '@material-ui/icons';
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../context/AuthContext";
 
@@ -18,16 +18,9 @@ function Topbar() {
                 </Link>
             </div>
             <div className="topbarCenter">
-                <div className="searchbar">
-                    <Search className='searchIcon'/>
-                    <input placeholder='Rechercher un.e ami.e ou un post' className="searchInput" />
-                </div>
             </div>
             <div className="topbarRight">
-                <div className="topbarLinks">
-                  <span className="topbarLink">Homepage</span>
-                  <span className="topbarLink">Timeline</span>
-                </div>
+                
                 <div className="topbarIcons">
                   <div className="topbarIconItem">
                     <AccountCircleOutlined/>
@@ -44,6 +37,11 @@ function Topbar() {
                 </div>
                 <Link to={`/profile/${user.username}`}>
                 <img src={user.avatar ? PF + user.avatar : PF + "random-user.jpg"} alt="" className='topbarImg' />
+                </Link>
+                <Link to={`/logout`}>
+                <button className="topbarLogout">
+                  < ExitToAppOutlined />
+                </button>
                 </Link>
             </div>
         </div>

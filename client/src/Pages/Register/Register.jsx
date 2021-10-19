@@ -18,8 +18,9 @@ export default function Register() {
 
   const handleClick = async (e) => {
     e.preventDefault()
+    
     if(passwordConfirmation.current.value !== password.current.value) {
-      passwordConfirmation.current.setCustomValidity("Les mots de passes ne correspondent pas")
+      passwordConfirmation.current.setCustomValidity("Les mots de passes ne correspondent pas");
     } else {
       const user = {
         username: username.current.value,
@@ -51,6 +52,7 @@ export default function Register() {
         </div>
         <div className="loginRight">
           <form className="loginBoxRegister" onSubmit={handleClick}>
+            <h3 className="AuthTitle">Inscription</h3>
             <input placeholder="Prénom" required className="loginInputRegister" ref={username}/>
             <input placeholder="Email" type="email" required className="loginInputRegister" ref={email}/>
             <input placeholder="Ville d'accueil aux Etats-Unis" type="text" required className="loginInputRegister" ref={city}/>

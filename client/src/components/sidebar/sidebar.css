@@ -56,3 +56,16 @@
 
 }
 
+.sidebarList span {
+    color: var(--dark-color)
+}
+
+.sidebarList span:hover {
+    color: var(--orange-color)
+}
+
+
+.questionContainer .sidebar {
+    flex:2;
+
+}

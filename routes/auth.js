@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require('bcrypt'); //to hash and crypt the password
 const jwt = require ("jsonwebtoken");
+const { registerErrors, logInErrors } = require("../Utils/errors.utils");
 
 
 const maxToken = 3 * 24 * 60 * 60 *1000;
@@ -14,8 +15,8 @@ const createToken = (id) => {
 //Register
 router.post("/register", async (req, res) => {
     try {
-        //generate new password
-        const salt = await bcrypt.genSalt(10);
+        //generate new password and hashed it
+        const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
         //create new user
         const newUser = new User ({
@@ -27,9 +28,10 @@ router.post("/register", async (req, res) => {
         });
         // save user and respond
        const user = await newUser.save();
-       res.status(200).send(user);
+       res.status(201).send(user);
    } catch (err) {
-        res.status(500).json(err);
+       const errors = registerErrors(err);
+        res.status(200).send({errors});
    }
 })
 
@@ -47,7 +49,7 @@ router.post("/login", async (req, res) => {
         res.cookie('jwt', token,  { httpOnly: true, maxToken});
         res.status(200).json({user: user._id})
     } catch (err) {
-        console.log(err)
+       res.status(200).send(err);
     }
 })
 

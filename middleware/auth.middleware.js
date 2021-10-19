@@ -3,46 +3,36 @@ const User = require("../models/User");
 const mongoose = require('mongoose');
 
 
-module.exports.checkUser = (req, res, next) => {
-    // fetching if cookies
-    let token = req.cookies.jwt;
-    // if token, need to verify
-    if (token) {
-        console.log(token)
-        jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
-            // if error, fake jwt so we remove user token
-            if (err) {
-                res.locals.user = null;
-                res.cookie('jwt', '', {maxAge: 1});
-                res.status(403).json("Not allowed")
-            } else {
-                console.log("decoded token "+ decodedToken.id);
-                let user = await User.findById(decodedToken.id);
-                res.locals.user = user;
-                console.log(res.locals.user);
-                next();
-            }
-        })
-        // if no token, null
+function verify(req, res, next) {
+    const authHeader = req.headers.token;
+    if (authHeader) {
+      const token = authHeader.split(" ")[1];
+  
+      jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+        if (err) res.status(403).json("Token is not valid!");
+        req.user = user;
+        next();
+      });
     } else {
-        res.locals.user = null;
-        res.status(403).json("Not allowed")
-
+      return res.status(401).json("You are not authenticated!");
     }
-}
+  }
+  
+module.exports.verify;
 
 module.exports.requireAuth = (req, res, next) => {
     //check if token 
     let token = req.cookies.jwt;
     if (token) {
-        console.log(token)
+        // console.log(token)
         jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
         if (err) {
         // if error, stop
             console.log(err);
             res.status(200).json('No token')
         } else { 
-            console.log("bon"+ decodedToken.id);
+            req.userId = decodedToken.id;
+            // console.log("bon"+ decodedToken.id);
             next();
         }
         });

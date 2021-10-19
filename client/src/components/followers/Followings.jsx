@@ -11,4 +11,4 @@ function Followings({user}) {
         </li>
       );
     }
-export default Followings
+export default Followings;

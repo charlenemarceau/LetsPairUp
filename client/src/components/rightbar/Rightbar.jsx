@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import './rightbar.css';
-import { Users } from "../../dummyData";
-import Online from '../online/Online';
+// import { Users } from "../../dummyData";
+// import Online from '../online/Online';
 import { dateParser } from '../../Utils';
 import axios from "axios";
 import {Link} from 'react-router-dom';
@@ -49,18 +49,9 @@ export default function Rightbar({ user }) {
     const HomeRightbar = () => {
     return (
       <>
-        <div className="birthdayContainer">
-          <img className="birthdayImg" src="assets/random-user.jpg" alt="" />
-          <span className="birthdayText">
-            <b>Stef Deluca</b> et <b>4 autres</b> fêtent leurs anniversaires aujourd'hui
-          </span>
-        </div>
-        <h4 className="rightbarTitle">Amies en ligne</h4>
-        <ul className="rightbarFriendList">
-          {Users.map((u, i) => (
-            <Online key={i} user={u} />
-          ))}
-        </ul>
+      {/* <div className="mapContainer">
+        <Map />
+      </div> */}
       </>
     );
 }

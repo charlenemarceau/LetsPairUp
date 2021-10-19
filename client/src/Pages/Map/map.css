@@ -1,0 +1,66 @@
+.mapContainer {
+    display: flex;
+    width: 100%;
+}
+
+.mapComponent{
+    margin: 5px;
+ }
+
+.mapContainer .sidebar {
+    flex: 1;
+}
+
+.card {
+   width: 150px;
+   height: 100px;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-around;
+ }
+
+.mapComponent label {
+    width: max-content;
+    color: var(--blue-color);
+    font-style: 13px;
+    border-bottom: 1px solid var(--pale-blue-color);
+    margin: 3px 0;
+
+}
+ 
+.mapboxgl-popup-close-button {
+    width: 20px;
+    height: 20px;
+}
+
+.mapComponent form {
+    width: 150px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+}
+
+.mapComponent input {
+    border: none;
+    margin-top: 15px;
+}
+
+.mapComponent form label {
+    width: fit-content;
+    border-bottom: none;
+}
+
+.CheckBoxLabel {
+    margin: 10px;
+    font-size: 14px;
+}
+
+.submitButton {
+    margin-top: 20px;
+    border: none;
+    background: var(--orange-color);
+    border-radius: 5px;
+    padding: 5px;
+    color: var(--white-color);
+    cursor: pointer;
+}

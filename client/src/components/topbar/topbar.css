@@ -103,6 +103,15 @@
     cursor: pointer;
 }
 
+.topbarLogout {
+    margin-right: 15px;
+    cursor: pointer;
+    position: relative;
+    border: none;
+    background-color: var(--pale-pink-color);
+    color: var(--blue-color);
+}
+
 /* @media screen and (max-width: 768px) {
     .text-agency {
       font-size: 20px;

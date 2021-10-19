@@ -31,6 +31,7 @@ export default function Login() {
         </div>
         <div className="loginRight">
           <form className="loginBox" onSubmit={handleClick}>
+            <h3 className="AuthTitle">Se connecter</h3>
             <input placeholder="Email" type="email" required className="loginInput" ref={email}/>
             <input placeholder="Password" type="password" required minLength="6" className="loginInput" ref={password}/>
             <button className="loginButton"type="submit" disabled={isFetching}>{isFetching ? (<CircularProgress color="white" size="18px"/> ): ("Se connecter")}</button>
