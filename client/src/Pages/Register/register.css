@@ -23,6 +23,11 @@
   justify-content: center;
 }
 
+.loginLeft {
+  margin-right: 50px;
+}
+
+
 .AppName {
   width: 100%;
 }
@@ -113,4 +118,29 @@ text-align: center;
   text-align: center;
   color: var(--blue-color);
   margin-bottom: 5px;
+}
+
+.terms {
+  display:flex;
+  flex-wrap: wrap;
+}
+.termsLabel {
+  display: flex;
+}
+.termsLink {
+  width: fit-content;
+}
+.error {
+  color:red;
+  text-align: center!important;
+}
+
+.success {
+  color: green;
+  display: flex;
+  position:absolute;
+  bottom: 25px;
+  transform: translateX(50%);
+  right: 50%;
+  font-size: 18px;
 }

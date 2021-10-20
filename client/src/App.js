@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useDispatch, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,27 +11,43 @@ import Register from "./Pages/Register/Register";
 import Profile from "./Pages/Profile/Profile";
 import Map from "./Pages/Map/Map";
 import Question from './Pages/Questions/Questions';
-// import { AuthContext } from "./context/AuthContext";
+import { UidContext } from './components/AppContext';
+import axios from "axios";
+
 
 function App() {
+  const [uid, setUid] = useState(null);
+  // const dispatch = useDispatch();
 
-  // const {user} = useContext(AuthContext);
+  useEffect(() => {
+    const fetchToken = async() => {
+      await axios({
+      methods: "get",
+      url: `${process.env.REACT_APP_API_URL}jwtid`,
+      withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res);
+      setUid(res.data);
+    }) 
+    .catch((err) => console.log("No token  "+ err ));
+    }
+    fetchToken();
+  }, [uid]);
+
   return (
+    <UidContext.Provider value={uid}>
       <Router>
-        <Switch>
+        {!uid ? (
+        <Route path="/login">
+            <Login/>
+          </Route>) : (
+            <>
+            <Switch>
           <Route exact path="/"> 
           <Home/>
-          {/*if user is connected, app will go to homepage. If not connected, app will go to register page*/}
-            {/* {user ? <Home/> : <Register/>} */}
-          </Route>
-          <Route path="/login">
-          {/*if user is connected, app will go to homepage. If not connected, app will go to login page*/}
-            {/* {user ? <Redirect to ="/"/> : <Login/>} */}
-            <Login/>
           </Route>
           <Route path="/register">
-          {/*if user is connected, app will go to homepage. If not connected, app will go to register page*/}
-            {/* {user ? <Redirect to ="/"/> : <Register/>} */}
             <Register/>
           </Route>
           <Route path="/profile/:username">
@@ -43,8 +59,11 @@ function App() {
           <Route path="/questions">
             <Question/>
           </Route>
+          <Redirect to='/login'/>
         </Switch>
+            </>)}
       </Router>
+    </UidContext.Provider>
   );
 }
 

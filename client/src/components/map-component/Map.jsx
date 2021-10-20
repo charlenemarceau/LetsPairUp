@@ -1,9 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState,  useEffect } from 'react';
 import ReactMapGL, {Marker, Popup}  from 'react-map-gl';
 import { Room } from '@material-ui/icons';
 import axios from "axios";
 import {Link} from 'react-router-dom';
-import { AuthContext } from "../../context/AuthContext";
+// import { AuthContext } from "../../context/AuthContext";
 
 
 
@@ -16,7 +16,7 @@ import { AuthContext } from "../../context/AuthContext";
 function Map( {pin}) {
   const [pins, setPins] = useState([]);
   const [user, setUser] = useState({});
-  const {user:currentUser} = useContext(AuthContext);
+  // const {user:currentUser} = useContext(AuthContext);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
   const [link, setLink] = useState(false);
@@ -28,14 +28,14 @@ function Map( {pin}) {
     zoom: 3
   });
 
-  useEffect (() => {
-    const fetchUser = async () => {
-        const res = await axios.get(`/users?userId=${pin.userId}`);
-        setUser(res.data)
-        console.log(res.data)
-    };
-    fetchUser();
-}, [ pins.userId])
+//   useEffect (() => {
+//     const fetchUser = async () => {
+//         const res = await axios.get(`/users?userId=${pin.userId}`);
+//         setUser(res.data)
+//         console.log(res.data)
+//     };
+//     fetchUser();
+// }, [ pins.userId])
 
   useEffect(() => {
     const getPins = async () => {
@@ -49,10 +49,10 @@ function Map( {pin}) {
     getPins();
   }, [])
 
-  const handleMarkerClick = (id, lat, long) => {
-    setCurrentPlaceId(id);
-    setViewport({...viewport, latitude: lat, longitude:long})
-  }
+  // const handleMarkerClick = (id, lat, long) => {
+  //   setCurrentPlaceId(id);
+  //   setViewport({...viewport, latitude: lat, longitude:long})
+  // }
 
   const handleAddClick = (e) => {
     // fetching the latitude and longitude on the click's current place
@@ -65,19 +65,19 @@ function Map( {pin}) {
 
    const handleSubmit = async (e) => {
      e.preventDefault();
-     const newPin = {
-      userId: currentUser,
-      link: `/profile/${currentUser.username}`,
-      lat: newPlace.lat,
-      long: newPlace.long,
-     }
-     try {
-        const res = await axios.post("/pins", newPin);
-        setPins([...pins, res.data]);
-        setNewPlace(null);
-     } catch (err) {
-       console.log(err)
-     }
+    //  const newPin = {
+    //   userId: currentUser,
+    //   link: `/profile/${currentUser.username}`,
+    //   lat: newPlace.lat,
+    //   long: newPlace.long,
+    //  }
+    //  try {
+    //     const res = await axios.post("/pins", newPin);
+    //     setPins([...pins, res.data]);
+    //     setNewPlace(null);
+    //  } catch (err) {
+    //    console.log(err)
+    //  }
    }
   return (
     <ReactMapGL className='mapComponent'
@@ -102,8 +102,8 @@ function Map( {pin}) {
           offsetLeft={-3.5 * viewport.zoom}
           offsetTop={-7 * viewport.zoom}
         >
-          <Room className='HereIcon' style={{fontSize:viewport.zoom * 7, cursor: "pointer", color: p.userId === currentUser ? '#ffbf69' : '#2ec4b6'}}
-           onClick={() => handleMarkerClick(p._id, p.lat, p.long)}/>
+          {/* <Room className='HereIcon' style={{fontSize:viewport.zoom * 7, cursor: "pointer", color: p.userId === currentUser ? '#ffbf69' : '#2ec4b6'}}
+           onClick={() => handleMarkerClick(p._id, p.lat, p.long)}/> */}
         </Marker>
           {p._id === currentPlaceId && (
             <Popup

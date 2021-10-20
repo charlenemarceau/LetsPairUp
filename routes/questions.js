@@ -2,6 +2,19 @@ const router = require("express").Router();
 const Question = require("../models/Question");
 const User = require("../models/User");
 
+
+
+// read questions 
+router.get("/", (req, res) => {
+    Question.find((err, docs) => {
+      if (!err) {
+        res.send(docs);
+      } else {
+        console.log(err)
+      }
+    }).sort({createdAt: -1})
+  });
+
 // create a question
 router.post('/', async (req, res) => {
     const newQuestion = new Question(req.body);

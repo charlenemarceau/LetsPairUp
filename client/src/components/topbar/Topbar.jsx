@@ -1,26 +1,26 @@
 import React, { useContext } from 'react';
 import "./topbar.css"
-import {Search, AccountCircleOutlined, ChatOutlined, Notifications, ExitToAppOutlined} from '@material-ui/icons';
-import {Link} from "react-router-dom";
-import {AuthContext} from "../../context/AuthContext";
+import {AccountCircleOutlined, ChatOutlined, Notifications} from '@material-ui/icons';
+import {NavLink} from "react-router-dom";
+import { UidContext } from "../AppContext";
+import Logout from '../Logout/Logout';
 
 function Topbar() {
-  // use of the context to get the user
-  const {user} = useContext(AuthContext); 
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const uid = useContext(UidContext)
 
     return (
+      <>
+      {uid ? (
         <div className='topbarContainer'>
             <div className="topbarLeft">
                 <img className="logoImg" src="/assets/logo-letspairup.png" alt="" />
-                <Link to="/" style={{textDecoration:"none"}}>
+                <NavLink to="/" style={{textDecoration:"none"}}>
                   <span className="logo">Let's Pair Up</span>
-                </Link>
+                </NavLink>
             </div>
             <div className="topbarCenter">
             </div>
             <div className="topbarRight">
-                
                 <div className="topbarIcons">
                   <div className="topbarIconItem">
                     <AccountCircleOutlined/>
@@ -35,16 +35,24 @@ function Topbar() {
                     <span className="topbarIconBadge">1</span>
                   </div>
                 </div>
-                <Link to={`/profile/${user.username}`}>
-                <img src={user.avatar ? PF + user.avatar : PF + "random-user.jpg"} alt="" className='topbarImg' />
-                </Link>
-                <Link to={`/logout`}>
-                <button className="topbarLogout">
-                  < ExitToAppOutlined />
-                </button>
-                </Link>
+                <NavLink to={`/profile/`}>
+                {/* <img src={user.avatar ? PF + user.avatar : PF + "random-user.jpg"} alt="" className='topbarImg' /> */}
+                Valeur dynamique
+                </NavLink>
+                <Logout/>
             </div>
-        </div>
+            </div>
+            ) : (
+            <div className='topbarContainer'>
+            <div className="topbarLeft">
+                <img className="logoImg" src="/assets/logo-letspairup.png" alt="" />
+                <NavLink to="/" style={{textDecoration:"none"}}>
+                  <span className="logo">Let's Pair Up</span>
+                </NavLink>
+            </div>
+            </div>
+            )}
+    </>
     )
 }
 

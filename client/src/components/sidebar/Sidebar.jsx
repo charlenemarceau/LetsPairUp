@@ -1,25 +1,25 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import './sidebar.css';
 import { HelpOutlineOutlined, CardTravelOutlined, PersonOutlineOutlined, ChatOutlined, MapOutlined } from '@material-ui/icons';
 import { Users } from "../../dummyData";
 import Followings from '../followers/Followings';
 import {Link} from "react-router-dom";
-import {AuthContext} from "../../context/AuthContext";
+// import {AuthContext} from "../../context/AuthContext";
 
 
 
 function Sidebar() {
      // use of the context to get the user
-  const {user} = useContext(AuthContext); 
+//   const {user} = useContext(AuthContext); 
     return (
         <div className='sidebar'>
             <div className="sidebarWrapper">
                 <ul className="sidebarList">
                     <li className="sidebarListItem">
                         < PersonOutlineOutlined className='sidebarIcon' />
-                        <Link to={`/profile/${user.username}`} style={{textDecoration:"none"}}>
+                        {/* <Link to={`/profile/${user.username}`} style={{textDecoration:"none"}}> */}
                             <span className="sidebarListItemText">Profil</span>
-                        </Link>
+                        {/* </Link> */}
                     </li>
                     <li className="sidebarListItem">
                         < ChatOutlined className='sidebarIcon' />

@@ -1,47 +1,86 @@
 import axios from "axios";
-import { useRef } from "react";
+import { useState } from "react";
 import "./register.css";
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
+import Login from "../Login/Login";
 
 export default function Register() {
-  const username = useRef();
-  const email = useRef();
-  const age = useRef();
-  const avatar = useRef();
-  const city = useRef();
-  const from = useRef();
-  const arrivedDate = useRef();
-  const password = useRef();
-  const passwordConfirmation = useRef();
-  const history = useHistory()
+  const [formSubmit, setFormSubmit] = useState(false);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [age, setAge] = useState(''); 
+  const [city, setCity] = useState(''); 
+  const [from, setFrom] = useState(''); 
+  const [arrivedDate, setArrivedDate] = useState(''); 
+  const [password, setPassword] = useState("");
+  const [controlPassword, setControlPassword] = useState("");
 
-  const handleClick = async (e) => {
-    e.preventDefault()
-    
-    if(passwordConfirmation.current.value !== password.current.value) {
-      passwordConfirmation.current.setCustomValidity("Les mots de passes ne correspondent pas");
-    } else {
-      const user = {
-        username: username.current.value,
-        email: email.current.value,
-        password: password.current.value,
-        avatar: avatar.current.value,
-        city: city.current.value,
-        from: from.current.value,
-        age: age.current.value,
-        arrivedDate: arrivedDate.current.value,
-      };
-      try {
-        await axios.post("auth/register", user);
-        history.push("/login")
-      } catch (err) {
-        console.log(err)
+  const handleRegister = async (e) => {
+  e.preventDefault();
+      const terms = document.getElementById("terms");
+      const usernameError = document.querySelector(".username.error");
+      const emailError = document.querySelector(".email.error");
+      const ageError = document.querySelector(".age.error");
+      const passwordError = document.querySelector(".password.error");
+      const passwordConfirmError = document.querySelector(
+        ".password-confirm.error"
+  );
+  const termsError = document.querySelector(".terms.error");
+
+  passwordConfirmError.innerHTML = "";
+  termsError.innerHTML = "";
+
+  if (password !== controlPassword || !terms.checked) {
+      if (password !== controlPassword) {
+      passwordConfirmError.innerHTML =
+        "Les mots de passes ne sont pas identiques"; 
+      } 
+      if (!age) {
+      ageError.innerHTML = "Vous devez sélectionner un âge";
+      } 
+      if (!terms.checked) {
+          termsError.innerHTML = "Les conditions générales doivent être acceptées.";
       }
-    }
-  };
+  } else {
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_API_URL}api/auth/register`,
+      data: {
+        username,
+        email,
+        password,
+        age,
+        city,
+        from,
+        arrivedDate,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.data.errors) {
+          usernameError.innerHTML = res.data.errors.username;
+          emailError.innerHTML = res.data.errors.email;
+          ageError.innerHTML = res.data.errors.dateOfBirth;
+          passwordError.innerHTML = res.data.errors.password;
+        } else {
+          setFormSubmit(true);
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+};
 
   return (
+    <>
+    { formSubmit ? (
+      <>
+      
+      < Login />
+      <h4 className="success">Votre profil a bien été crée. Vous pouvez dés à présent vous connecter.</h4>
+      
+      </>
+    ) : (
     <div className="loginRegister">
       <div className="loginWrapper">
         <div className="loginLeft">
@@ -51,16 +90,41 @@ export default function Register() {
           </span>
         </div>
         <div className="loginRight">
-          <form className="loginBoxRegister" onSubmit={handleClick}>
+          <form className="loginBoxRegister" onSubmit={handleRegister}>
             <h3 className="AuthTitle">Inscription</h3>
-            <input placeholder="Prénom" required className="loginInputRegister" ref={username}/>
-            <input placeholder="Email" type="email" required className="loginInputRegister" ref={email}/>
-            <input placeholder="Ville d'accueil aux Etats-Unis" type="text" required className="loginInputRegister" ref={city}/>
-            <input placeholder="D'où venez vous ?" type="text" required className="loginInputRegister" ref={from}/>
-            <input placeholder="Votre âge" type="number" min="18" required className="loginInputRegister" ref={age}/>
-            <input placeholder="Date d'arrivé aux Etats-Unis" type="date" required className="loginInputRegister" ref={arrivedDate}/>
-            <input placeholder="Mot de passe" type="password" required minLength="6"className="loginInputRegister" ref={password}/>
-            <input placeholder="Confirmer mot de passe" type="password" required className="loginInputRegister" ref={passwordConfirmation}/>
+            <input placeholder="Nom d'utilisateur" required className="loginInputRegister"id="username"
+             onChange={(e) => setUsername(e.target.value)} value={username}/>
+            <div className="pseudo error"></div>
+            <input placeholder="Email" type="email" required className="loginInputRegister" id="email"
+             onChange={(e) => setEmail(e.target.value)} value={email} />
+            <div className="email error"></div>
+            <input placeholder="Ville d'accueil aux Etats-Unis" type="text" required className="loginInputRegister"
+             onChange={(e) => setCity(e.target.value)} value={city}/>
+            <input placeholder="D'où venez vous ?" type="text" required className="loginInputRegister"
+             onChange={(e) => setFrom(e.target.value)} value={from}/>
+            <input placeholder="Votre âge" type="number" min="18" required className="loginInputRegister"
+             onChange={(e) => setAge(e.target.value)} value={age}/>
+            <div className="age error"></div>
+            <input placeholder="Date d'arrivé aux Etats-Unis" type="date" required className="loginInputRegister"
+              onChange={(e) => setArrivedDate(e.target.value)} value={arrivedDate}/>
+            <input placeholder="Mot de passe" type="password" required minLength="6" className="loginInputRegister" 
+            onChange={(e) => setPassword(e.target.value)} value={password}/>
+            <div className="password error"></div>
+            <input placeholder="Confirmer mot de passe" type="password" required className="loginInputRegister" onChange={(e) => setControlPassword(e.target.value)} value={controlPassword} />
+            <div className="password-confirm error"></div>
+            <br />
+            <div className="terms">
+            <input type="checkbox" id="terms" className="termsLabel"/>
+            <label htmlFor="terms" className="termsLabel">
+            &ensp;J'accepte les&nbsp;
+              <a href="/" target="_blank" rel="noopener noreferrer" className='termsLink'>
+                 conditions générales
+              </a>
+            </label>
+            <div className="terms error"></div>
+
+            </div>
+            <br />
             <button className="loginButton" type="submit">S'inscrire</button>
             <Link to="/login">
               <button className="loginRegisterButton"> Se connecter </button>
@@ -69,5 +133,7 @@ export default function Register() {
         </div>
       </div>
     </div>
+    )}
+    </>
   );
 }

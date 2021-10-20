@@ -5,17 +5,17 @@ const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 const cors = require('cors');
+const multer = require('multer');
+const path = require ('path');
 
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
 const pinRoute = require("./routes/pins");
 const questionRoute = require("./routes/questions");
-const multer = require('multer');
-const path = require ('path');
-// const jwt = require ("jsonwebtoken");
-var bodyParser = require('body-parser')
+const { checkUser, requireAuth} = require("./middleware/auth.middleware")
 
 dotenv.config();
 
@@ -40,11 +40,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
-// //JWT
-// app.get('*', checkUser);
-// app.get('/jwtid', requireAuth, (req, res) => {
-//   res.status(200).send(res.locals.user._id)
-// })
+//JWT
+// * = verify with every request
+app.get('*', checkUser);
+app.get('/jwtid', requireAuth, (req, res) => {
+  res.status(200).send(res.locals.user._id)
+})
 
 // multer 
 // instauring destination path

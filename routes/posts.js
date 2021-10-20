@@ -90,11 +90,15 @@ router.get("/:id", async (req, res) => {
 })
 
 // get all posts
-router.get("/posts", async (req, res) => {
-    const posts = await Post.find();
-    console.log(posts._id)
-    res.send(posts._id);
-})
+router.get("/", (req, res) => {
+    Post.find((err, docs) => {
+      if (!err) {
+        res.send(docs);
+      } else {
+        console.log(err)
+      }
+    }).sort({createdAt: -1})
+});
 
 // get timeline posts
 router.get("/timeline/:userId", async (req, res) => {

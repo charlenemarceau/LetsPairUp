@@ -1,22 +1,29 @@
 const jwt = require('jsonwebtoken');
 const User = require("../models/User");
-const mongoose = require('mongoose');
 
 
-function verify(req, res, next) {
-    const authHeader = req.headers.token;
-    if (authHeader) {
-      const token = authHeader.split(" ")[1];
-  
-      jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-        if (err) res.status(403).json("Token is not valid!");
-        req.user = user;
-        next();
+module.exports.checkUser = (req, res, next) => {
+  // fetch cookies jwt
+  const token = req.cookies.jwt; 
+  if (token) {
+    // if token, verify if valid
+      jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
+          if (err) {
+              res.locals.user = null;
+              // res.cookie('jwt', "", { maxAge : 1});
+              next();
+          } else {
+            // if valid, find user
+              let user = await User.findById(decodedToken.id);
+              res.locals.user = user; 
+              next();
+          }
       });
-    } else {
-      return res.status(401).json("You are not authenticated!");
-    }
+  } else {
+      res.locals.user = null;
+      next();
   }
+};
   
 module.exports.verify;
 
@@ -29,10 +36,10 @@ module.exports.requireAuth = (req, res, next) => {
         if (err) {
         // if error, stop
             console.log(err);
-            res.status(200).json('No token')
+            res.status(200).json('No valid token')
         } else { 
-            req.userId = decodedToken.id;
-            // console.log("bon"+ decodedToken.id);
+            // req.userId = decodedToken.id;
+            console.log("bon"+ decodedToken.id);
             next();
         }
         });

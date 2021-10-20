@@ -3,9 +3,11 @@ import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Feed from "../../components/feed/Feed";
 import Rightbar from "../../components/rightbar/Rightbar";
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import axios from "axios";
 import {useParams} from "react-router";
+import { UidContext } from '../../components/AppContext';
+import Log from '../../components/log';
 
 
 
@@ -13,6 +15,7 @@ export default function Profile() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [user, setUser] = useState({});
   const username = useParams().username;
+  const uid = useContext(UidContext);
 
 
   useEffect (() => {
@@ -25,6 +28,8 @@ export default function Profile() {
   
   return (
     <>
+      { uid ? (
+      <>
       <Topbar />
       <div className="profile">
         <Sidebar />
@@ -44,8 +49,14 @@ export default function Profile() {
             <Feed username={username}/>
             <Rightbar user={user}/>
           </div>
-        </div>
+        </div> 
       </div>
+      </>
+      ) : (
+        <>
+         <Log login={false} register={true}/> 
+        </>
+      )}
     </>
   );
 }
