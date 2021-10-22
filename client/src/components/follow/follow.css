@@ -1,0 +1,99 @@
+.followContainer h4 {
+    width: 110px;
+    background: var(--orange-color);
+    padding: 20px 80px;
+    margin: 5px auto;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.followContainer h4:hover {
+    background: #facc90;
+}
+
+.followContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.popup-profil-container {
+    width: 400px;
+    height: 350px;
+    background: var(--pale-blue-color);
+    border-radius: 15px;
+    position: absolute;
+    display: flex;
+    transform: translateX(-100%);
+    left: (-100%);
+}
+.modal {
+    display: flex;
+    flex-direction: column;
+    margin: 15px auto;
+
+}
+
+.modal .cross {
+    display: flex;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+.modal h2 {
+    text-align: center;
+    margin: 10px;
+}
+
+.modal h4 {
+    margin-left: 25px;
+}
+
+.modal h3 {
+    display: flex;
+    align-items: center;
+    margin-left: 25px;
+    width: 60px;
+}
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.modal li {
+    display: flex;
+    flex-direction: row;
+    margin: 15px;
+}
+
+.unfollow-btn {
+    background: var(--pale-pink-color);
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+    color: var(--blue-color);
+    font-size: 17px;
+    font-weight: 600;
+    margin-left: 75px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.follow-btn {
+    background: var(--pale-pink-color);
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+    color: var(--blue-color);
+    font-size: 17px;
+    font-weight: 600;
+    margin-left: 85px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+

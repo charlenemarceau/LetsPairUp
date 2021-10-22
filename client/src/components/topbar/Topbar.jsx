@@ -4,9 +4,12 @@ import {AccountCircleOutlined, ChatOutlined, Notifications} from '@material-ui/i
 import {NavLink} from "react-router-dom";
 import { UidContext } from "../AppContext";
 import Logout from '../Logout/Logout';
+import { useSelector } from 'react-redux';
 
 function Topbar() {
-  const uid = useContext(UidContext)
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const uid = useContext(UidContext); // get the context
+  const userData = useSelector((state) => state.userReducer); // get the data from the userReducer
 
     return (
       <>
@@ -35,9 +38,8 @@ function Topbar() {
                     <span className="topbarIconBadge">1</span>
                   </div>
                 </div>
-                <NavLink to={`/profile/`}>
-                {/* <img src={user.avatar ? PF + user.avatar : PF + "random-user.jpg"} alt="" className='topbarImg' /> */}
-                Valeur dynamique
+                <NavLink to={`/profile/${userData.username}`}>
+                <img src={userData.avatar ? PF + userData.avatar : PF + "random-user.jpg"} alt="" className='topbarImg' />
                 </NavLink>
                 <Logout/>
             </div>

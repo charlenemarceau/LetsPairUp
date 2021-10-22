@@ -16,7 +16,6 @@ import {Link} from 'react-router-dom';
 function Map( {pin}) {
   const [pins, setPins] = useState([]);
   const [user, setUser] = useState({});
-  // const {user:currentUser} = useContext(AuthContext);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
   const [link, setLink] = useState(false);

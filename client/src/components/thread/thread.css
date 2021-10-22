@@ -1,7 +1,7 @@
-.feed {
+.thread {
     flex:5.5;
 }
 
-.feedWrapper {
+.threadWrapper {
     padding: 20px;
 }

@@ -1,26 +1,35 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './sidebar.css';
 import { HelpOutlineOutlined, CardTravelOutlined, PersonOutlineOutlined, ChatOutlined, MapOutlined } from '@material-ui/icons';
-import { Users } from "../../dummyData";
-import Followings from '../followers/Followings';
 import {Link} from "react-router-dom";
-// import {AuthContext} from "../../context/AuthContext";
+import { UidContext } from "../AppContext";
+import { useSelector } from 'react-redux';
 
 
 
 function Sidebar() {
-     // use of the context to get the user
-//   const {user} = useContext(AuthContext); 
+    const uid = useContext(UidContext); // get the context
+    const userData = useSelector((state) => state.userReducer); // get the data from the userReducer
+  
     return (
         <div className='sidebar'>
             <div className="sidebarWrapper">
                 <ul className="sidebarList">
+                    { uid ? (
                     <li className="sidebarListItem">
                         < PersonOutlineOutlined className='sidebarIcon' />
-                        {/* <Link to={`/profile/${user.username}`} style={{textDecoration:"none"}}> */}
+                        <Link to={`/profile/${userData.username}`} style={{textDecoration:"none"}}>
                             <span className="sidebarListItemText">Profil</span>
-                        {/* </Link> */}
+                        </Link>
                     </li>
+                    ) : (
+                    <li className="sidebarListItem">
+                    < PersonOutlineOutlined className='sidebarIcon' />
+                    <Link to={`/login`} style={{textDecoration:"none"}}>
+                        <span className="sidebarListItemText">Profil</span>
+                    </Link>
+                    </li>
+                    )}
                     <li className="sidebarListItem">
                         < ChatOutlined className='sidebarIcon' />
                         <span className="sidebarListItemText">Messages</span>
@@ -45,11 +54,11 @@ function Sidebar() {
                     </li>
                 </ul>
                 <hr className="sidebarHr" />
-                <ul className="sidebarFriendList">
-                    {Users.map((u) => (
+                {/* <ul className="sidebarFriendList">
+                    {userData.following.map((u) => (
                         <Followings key={u.id} user={u} />
                     ))}
-                </ul>
+                </ul> */}
             </div>
         </div>
     )

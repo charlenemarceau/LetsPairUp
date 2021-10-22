@@ -1,0 +1,120 @@
+.profil-container {
+    background: var(--blue-color);
+    width: 800px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.crossUpdate {
+    display: flex;
+    justify-content: right;
+    margin: 10px;
+}
+.updateTitle {
+    margin: 5px auto;
+}
+
+.updateContainer {
+    margin: 20px 55px;
+    display: flex;
+}
+
+.updateContainer h3 {
+    margin:0 auto 15px auto;
+}
+
+.left-part {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    margin:  20px auto;
+}
+
+.right-part {
+    flex-direction: column;
+    display: flex;
+    width: 100%;
+    margin: 20px auto ;
+
+}
+
+.updateUserImg {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: auto;
+    border: 2px solid white;
+}
+
+.upload-pic {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.changePicButton {
+    cursor: pointer;
+    background: var(--orange-color);
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+}
+
+.changeBioButton {
+    margin: 15px;
+    cursor: pointer;
+    background: var(--orange-color);
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+}
+.upload-pic input {
+    margin-top: 15px;
+    cursor: pointer;
+    background: var(--orange-color);
+    padding: 10px;
+    border-radius: 10px;
+    border:none;
+}
+
+.bio-update{
+    text-align: center;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    background-color: var(--pale-blue-color);
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.bio-update p {
+    width: 100%;
+    height: 100px;
+    background-color: var(--blue-color);
+    font-weight: 600;
+    font-size: 15px;
+    border: 1px solid var(--dark-color);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.buttonChangeBio {
+    margin: 15px;
+    cursor: pointer;
+    background: var(--orange-color);
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+}

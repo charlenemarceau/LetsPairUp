@@ -1,35 +1,25 @@
 import "./profile.css";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
-import Feed from "../../components/feed/Feed";
 import Rightbar from "../../components/rightbar/Rightbar";
-import React, {useState, useEffect, useContext} from 'react';
-import axios from "axios";
-import {useParams} from "react-router";
+import React, {useState, useContext} from 'react';
+import { useSelector } from "react-redux";
 import { UidContext } from '../../components/AppContext';
-import Log from '../../components/log';
+import UpdateProfil from "../../components/profil/UpdateProfil";
+import Thread from "../../components/thread/Thread";
 
 
 
 export default function Profile() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const [user, setUser] = useState({});
-  const username = useParams().username;
+  const userData = useSelector((state) => state.userReducer)
   const uid = useContext(UidContext);
+  const [updateProfilModal, setUpdateProfilModal] = useState(false);
+  const [updateForm, setUpdateForm] = useState(false);
 
-
-  useEffect (() => {
-    const fetchUser = async () => {
-        const res = await axios.get(`/users?username=${username}`);
-        setUser(res.data)
-    };
-    fetchUser();
-}, [username])
   
   return (
     <>
-      { uid ? (
-      <>
       <Topbar />
       <div className="profile">
         <Sidebar />
@@ -37,26 +27,28 @@ export default function Profile() {
           <div className="profileRightTop">
             <div className="profileCover">
               <div className="profileCoverImg">
-              <img className="profileUserImg" src={user.avatar ? PF + user.avatar : PF + "random-user.jpg"} alt=""/>
+              <img className="profileUserImg" src={userData.avatar ? PF + userData.avatar : PF + "random-user.jpg"} alt=""/>
             <div className="profileInfo">
-                <h4 className="profileInfoName">{user.username}</h4>
-                <span className="profileInfoDesc">{user.bio}</span>
+                <h4 className="profileInfoName">{userData.username}</h4>
+                {/* <p>{errors.maxSize}</p>
+                <p>{errors.format}</p> */}
+                <span className="profileInfoDesc">{userData.bio}</span>
+                <button className='changeProfilButton profile' onClick={() => setUpdateProfilModal(true)}>
+                  Changer votre profil
+                </button>
+                { updateProfilModal && (
+                  < UpdateProfil />
+                )}
             </div>
               </div>
             </div>
           </div>
           <div className="profileRightBottom">
-            <Feed username={username}/>
-            <Rightbar user={user}/>
+            <Thread username={userData.username}/>
+            <Rightbar/>
           </div>
         </div> 
       </div>
       </>
-      ) : (
-        <>
-         <Log login={false} register={true}/> 
-        </>
-      )}
-    </>
   );
 }
