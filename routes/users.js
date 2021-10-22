@@ -2,7 +2,19 @@ const router = require("express").Router();
 const User = require ('../models/User');
 const bcrypt = require('bcrypt'); //to hash and crypt the password
 const mongoose = require('mongoose');
+const { promisify } = require('util');
+const pipeline = promisify(require('stream').pipeline);
 
+
+//get all
+router.get("/users", async (req, res) => {
+  try {
+    // find correct user 
+    const users  = await User.find().select('-password');
+    res.status(200).json(users);
+} catch (err) {
+    res.status(500).json(err);
+}});
 
 // update user
 router.put("/:id", async (req, res) => {
@@ -21,8 +33,10 @@ router.put("/:id", async (req, res) => {
         try {
             const user = await User.findByIdAndUpdate(req.params.id, {
                 $set: req.body,
+            }, {
+              new: true, 
             });
-            res.status(200).json("Account has been updated");
+            res.status(200).json(user);
         } catch (err) {
             return res.status(500).json(err);
         }
@@ -30,6 +44,45 @@ router.put("/:id", async (req, res) => {
       return res.status(403).json("You can update only your account!");
     }
   });
+
+
+// updateProfilPic
+router.post("/upload", async (req, res) => {
+    try {
+        if (
+          req.file.detectedMimeType !== "image/jpg" &&
+          req.file.detectedMimeType !== "image/png" &&
+          req.file.detectedMimeType !== "image/jpeg"
+        )
+          throw Error("invalid file");
+    
+        if (req.file.size > 500000) throw Error("max size");
+      } catch (err) {
+        return res.status(201).json(err);
+      }
+      const fileName = req.body.name + ".jpg";
+    
+      await pipeline(
+        req.file.stream,
+        fs.createWriteStream(
+          `${__dirname}/../client/public/uploads/profil/${fileName}`
+        )
+      );
+    
+      try {
+        await UserModel.findByIdAndUpdate(
+          req.body.userId,
+          { $set : {avatar: "./uploads/profil/" + fileName}},
+          { new: true, upsert: true, setDefaultsOnInsert: true},
+          (err, docs) => {
+            if (!err) return res.send(docs);
+            else return res.status(500).send({ message: err });
+          }
+        );
+      } catch (err) {
+        return res.status(500).send({ message: err });
+      }
+})
 
 //delete user
 router.delete("/:id", async (req, res) => {
@@ -47,13 +100,12 @@ router.delete("/:id", async (req, res) => {
   });
 
 //get a user
-router.get("/", async (req, res) => {
+router.get("/:id", async (req, res) => {
     // to either get the user by their userId or their username
-    const userId = req.query.userId;
-    const username = req.query.username;
+    const userId = req.params.id;
     try {
         // if userId, search for a user with the id, if not search for the user with username
-        const user = userId ? await User.findById(userId) : await User.findOne({username:username});
+        const user = await User.findById(userId)
         // to not render password and updated at
         const { password, updatedAt, ...other } = user._doc;
         res.status(200).json(other);
@@ -96,51 +148,53 @@ router.get("/friends/:userId", async (req, res) => {
   });
 
 // follow a user
-router.put('/:id/follow', async (req, res) => {
+router.patch('/follow/:id', async (req, res) => {
     // check if current user and the user being followed are not the same user/id
     if (req.body.userId !== req.params.id) {
-        try {
-            // find user who is going to be followed
-            const user = await User.findById(req.params.id);
-            // if not the same id, find current user
-            const currentUser = await User.findById(req.body.userId);
-            // check if follower is already followed
-            // if not : push current user id in the followers of user followed
-            // and push in the following of the user followed the current user id
-            if (!user.followers.includes(req.body.userId)) {
-                await user.updateOne({$push: {followers: req.body.userId } });
-                await currentUser.updateOne({$push: {following: req.params.id } });
-                res.status(200).json('Followed!')
-            } else { // else error
-                res.status(403).json('You are already following this user.');
-            }
-        } catch (err) {
-            res.status(500).json(err);
-        }
+      try {
+          // find user who is going to be followed
+          const user = await User.findById(req.params.id);
+          // if not the same id, find current user
+          const currentUser = await User.findById(req.body.userId);
+          // check if follower is already followed
+          // if not : push current user id in the followers of user followed
+          // and push in the following of the user followed the current user id
+          if (!user.followers.includes(req.body.userId)) {
+              await user.updateOne({$push: {followers: req.body.userId } });
+              await currentUser.updateOne({$push: {following: req.params.id } });
+              res.status(200).json('Followed!')
+          } else { // else error
+              res.status(403).json('You are already following this user.');
+          }
+      } catch (err) {
+          res.status(500).json(err);
+      }
     } else {
         res.status(403).json('You can not follow yourself')
     }
 })
 
 // unfollow a user
-router.put('/:id/unfollow', async (req, res) => {
+router.patch('/unfollow/:id', async (req, res) => {
     // check if current user and the user being unfollowed are not the same user/id
     if (req.body.userId !== req.params.id) {
         try {
-            // find user who is going to be unfollowed
-            const user = await User.findById(req.params.id);
-            // if not the same id, find current user
-            const currentUser = await User.findById(req.body.userId);
-            // check if follower is already followed
-            // if followed, pull current user id out of the followers of user unfollowed
-            // and pull out of the following of the user unfollowed, the current user id
-            if (user.followers.includes(req.body.userId)) {
-                await user.updateOne({$pull: {followers: req.body.userId } });
-                await currentUser.updateOne({$pull: {following: req.params.id } });
-                res.status(200).json('Unfollowed!')
-            } else { // else error
-                res.status(403).json("You don't follow this user.");
-            }
+          // find user who is going to be unfollowed
+          const user = await User.findById(req.params.id);
+          // if not the same id, find current user
+          const currentUser = await User.findById(req.body.userId);
+          // check if follower is already followed
+          // if followed, pull current user id out of the followers of user unfollowed
+          // and pull out of the following of the user unfollowed, the current user id
+          if (user.followers.includes(req.body.userId)) {
+              await user.updateOne({$pull: {followers: req.body.userId } },
+                {new: true, upsert: true});
+              await currentUser.updateOne({$pull: {following: req.params.id } },
+                {new: true, upsert: true});
+              res.status(200).json('Unfollowed!')
+          } else { // else error
+              res.status(403).json("You don't follow this user.");
+          }
         } catch (err) {
             res.status(500).json(err);
         }
