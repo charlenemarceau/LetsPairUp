@@ -2,9 +2,9 @@ import "./profile.css";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Rightbar from "../../components/rightbar/Rightbar";
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import { useSelector } from "react-redux";
-import { UidContext } from '../../components/AppContext';
+// import { UidContext } from '../../components/AppContext';
 import UpdateProfil from "../../components/profil/UpdateProfil";
 import Thread from "../../components/thread/Thread";
 
@@ -13,9 +13,8 @@ import Thread from "../../components/thread/Thread";
 export default function Profile() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const userData = useSelector((state) => state.userReducer)
-  const uid = useContext(UidContext);
+  // const uid = useContext(UidContext);
   const [updateProfilModal, setUpdateProfilModal] = useState(false);
-  const [updateForm, setUpdateForm] = useState(false);
 
   
   return (

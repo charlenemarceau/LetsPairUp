@@ -1,21 +1,42 @@
 import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
-import { FavoriteOutlined, MoreVert } from '@material-ui/icons';
+import { MoreVert, Edit, Comment } from '@material-ui/icons';
 import './post.css';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { dateParserPost, isEmpty } from '../../Utils';
 import FollowHandler from '../followHandler/FollowHandler';
 import LikeButton from '../likeButton/LikeButton';
+import { updatePost } from '../../actions/post.actions';
+import DeletePost from './DeletePost';
+import Comments from "./Comment";
 
 function Post( {post} ) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [isLoading, setIsLoading] = useState(true);
+    const [isUpdated, setIsUpdated] = useState(false);
+    const [textUpdate, setTextUpdate] = useState(null);
+    const [moreOptions, setMoreOptions] = useState(false);
+    const [showComments, setShowComments] = useState(false);
     const usersData = useSelector((state) => state.usersReducer) // get users data
     const userData = useSelector((state) => state.userReducer) // get user data
+    const dispatch = useDispatch()
 
     useEffect(() => {
         !isEmpty(usersData[0]) && setIsLoading(false) // if usersData is not empty, no more loading spinner
     }, [usersData])
+
+    const handleMenu = () => {
+        setMoreOptions(true)
+    }
+    const handleMenuClose = () => {
+        setMoreOptions(false);
+    }
+
+    const updateItem = () => {
+        if (textUpdate) {
+            dispatch(updatePost(post._id, textUpdate));
+        }
+        setIsUpdated(false);
+    }
 
     return (
         <>
@@ -28,50 +49,82 @@ function Post( {post} ) {
             <div className="postWrapper">
                 <div className="postTop">
                     <div className="postTopLeft">
-                        <Link to={`/profile/${userData.username}`}>
-                            <img src={!isEmpty(usersData[0]) && usersData
-                            .map((user) => {
-                                if (user._id === post.userId) {
-                                    return user.avatar ? PF+user.avatar : PF + "random-user.jpg"
-                                }
-                                else return null
-                            }).join("")} alt="" className='postProfileImg'/>
-                        </Link>
+                        <img src={!isEmpty(usersData[0]) && usersData
+                        .map((user) => {
+                            if (user._id === post.posterId) {
+                                return user.avatar ? PF+user.avatar : PF + "random-user.jpg"
+                            }
+                            else return null
+                        }).join("")} alt="" className='postProfileImg'/>
                         <span className="postUserName">
                             <h3>
                             {!isEmpty(usersData[0]) && usersData
                                 .map((user) => {
-                                    if (user._id === post.userId) return user.username;
+                                    if (user._id === post.posterId) return user.username;
                                     else return null;
                             }).join("") }
                             </h3>
                             {/** if current user is the poster user, won't have the follow/unfollow suggestion */}
-                            {post.userId !== userData._id && (
-                            <FollowHandler idToFollow={post.userId} type={"card"}/>
+                            {post.posterId !== userData._id && (
+                            <FollowHandler idToFollow={post.posterId} type={"card"}/>
                             )}
                         </span>
                     </div>
                     <div className="postTopRight">
                         <span className="postDate">{dateParserPost(post.createdAt)}</span>
-                        <MoreVert />
+                        {userData._id === post.posterId && (
+                            <>
+                                { moreOptions && (
+                                    <>
+                                    <div className="moreOptionsContainer">
+                                    <div onClick={handleMenuClose} className="moreOptions-close">&#10006;</div>
+                                    <div className="moreOptions">
+                                        < Edit onClick={() => setIsUpdated(!isUpdated)}/>
+                                        < DeletePost id={post._id}/>
+                                    </div>
+                                    </div>
+                                    </>
+                                )}
+                                { !moreOptions && (
+                                    <div className="moreOptionsClose">
+                                        <MoreVert onClick={handleMenu} className="moreOptions-button"/>
+                                    </div>
+                                )}
+                            </>
+                        )}
                     </div>
                 </div>
                 <div className="postCenter">
-                    <span className="postText">
-                        {post?.message}
-                    </span>
+                    {isUpdated === false && <span className="postText">{post?.message}</span>}
+                    {isUpdated && (
+                        <div className="update-post">
+                            <textarea defaultValue={post?.message} onChange={((e) => setTextUpdate(e.target.value))}/>
+                            {/* <div className="button-container"> */}
+                                <button className="btn" onClick={updateItem}>
+                                    Valider modification
+                                </button>
+                            {/* </div> */}
+                        </div>
+                    )}
+                    
                     {post.image && <img className='postImg' src={PF+post.image} alt="" />}
                 </div>
                 <div className="postBottom">
                     <div className="postBottomLeft">
-                        < FavoriteOutlined className="likeIcon" />
                         <LikeButton post={post}/>
                     </div>
                     <div className="postBottomRight">
                     <span className="postCommentText">
-                        {post.comments ? post.comments.length : 0}{" "}
-                        commentaire
-                        {post.comments && post.comments.length > 1 ? "s" : null}</span>
+                        < Comment onClick={() => setShowComments(!showComments)} className="CommentButton" />
+                    </span>
+                    <div className="CommentsContainer">
+                        {showComments && (
+                            <Comments post={post} />
+                        )}
+                    </div>
+                        {/* // {post.comments ? post.comments.length : 0}{" "}
+                        // commentaire
+                        // {post.comments && post.comments.length > 1 ? "s" : null} */}
                     </div>
                 </div>
             </div>

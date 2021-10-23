@@ -7,7 +7,6 @@ import Logout from '../Logout/Logout';
 import { useSelector } from 'react-redux';
 
 function Topbar() {
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const uid = useContext(UidContext); // get the context
   const userData = useSelector((state) => state.userReducer); // get the data from the userReducer
 
@@ -39,7 +38,7 @@ function Topbar() {
                   </div>
                 </div>
                 <NavLink to={`/profile/${userData.username}`}>
-                <img src={userData.avatar ? PF + userData.avatar : PF + "random-user.jpg"} alt="" className='topbarImg' />
+                <img src={userData.avatar} alt="" className='topbarImg' />
                 </NavLink>
                 <Logout/>
             </div>

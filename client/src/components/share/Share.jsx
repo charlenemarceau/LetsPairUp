@@ -1,50 +1,68 @@
-import React, {useRef, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./share.css";
+import { useDispatch, useSelector } from "react-redux";
+import { isEmpty } from "../../Utils";
 import { LocationOnOutlined, PermMediaOutlined, CancelOutlined} from '@material-ui/icons';
-// import {AuthContext} from "../../context/AuthContext";
-import axios from "axios";
+import { addPost, getPosts } from "../../actions/post.actions";
+
+
 
 function Share() {
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-    // const {user} = useContext(AuthContext);
-    const message = useRef();
-    const [file, setFile] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [message, setMessage] = useState("");
+    const [postPicture, setPostPicture] = useState(null);
+    const [file, setFile] = useState();
+    const userData = useSelector((state) => state.userReducer);
+    // const error = useSelector((state) => state.errorReducer.postError);
+    const dispatch = useDispatch();
 
-    // const cancelPost = () => {
-    //   };
 
-    const submitHandler = async (e) => {
-        e.preventDefault();
-        // const newPost = {
-        //   userId: user._id,
-        //   message: message.current.value,
-        // };
-        // if (file) {
-        //   const data = new FormData();
-        //   const fileName = Date.now() + file.name;
-        //   data.append("name", fileName);
-        //   data.append("file", file);
-        //   newPost.image = fileName;
-        //   console.log(newPost);
-        //   try {
-        //     await axios.post("/upload", data);
-        //   } catch (err) {
-              
-        //   }
-        // }
-        // try {
-        //   await axios.post("/posts", newPost);
+    const handlePost = async () => {
+        if (message || postPicture) {
+          const data = new FormData();
+          data.append('posterId', userData._id);
+          data.append('message', message);
+          if (file) data.append("file", file);
+
+          await dispatch(addPost(data));
+          dispatch(getPosts());
+          cancelPost();
         //   window.location.reload();
-        // } catch (err) {}
-    };
+        } else {
+          alert("Veuillez entrer un message")
+        }
+      };
+     
+      const handlePicture = (e) => {
+          // create a link for the image
+        setPostPicture(URL.createObjectURL(e.target.files[0]));
+        setFile(e.target.files[0]);
+      }; 
+    
+      const cancelPost = () => {
+        setMessage("");
+        setPostPicture("");
+        setFile("");
+      };
+
+    useEffect(() => {
+        if (!isEmpty(userData)) setIsLoading(false);
+    }, [userData])
 
 
+
+
+    
     return (
         <div className="share">
+            {isLoading ? (
+                <i className="fas fa-spinner fa-pulse"></i>
+            ) : (
+            <>
             <div className="shareWrapper">
                 <div className="shareTop">
-                    {/* <img className='shareProfileImg' src={user.avatar ? PF+user.avatar : PF + "random-user.jpg"} alt="" />
-                    <input placeholder={"Quoi de neuf " + user.username + " ?"} className='shareInput' ref={message}/> */}
+                    <img className='shareProfileImg' src={userData.avatar} alt="" />
+                    <input placeholder={"Quoi de neuf " + userData.username + " ?"} className='shareInput' onChange={((e) => setMessage(e.target.value))} value={message} />
                 </div>
                 <hr className="shareHr" />
                 {file && (
@@ -54,21 +72,26 @@ function Share() {
                         < CancelOutlined className="shareCancelImg" onClick={() => setFile("")}/>
                     </div>
                 )}
-                <form className="shareBottom" onSubmit={submitHandler}>
+                <form className="shareBottom" onSubmit={handlePost}>
                     <div className="shareOptions">
                         <label htmlFor='file' className="shareOption">
                             <PermMediaOutlined className='shareIcon'/>
                             <span className="shareOptionText">Image ou vidéo</span>
-                            <input type="file" name="file" id="file" accept=".jpg, .png, .jpeg" style={{display:"none"}}onChange={(e) => setFile(e.target.files[0])}/>
+                            <input type="file" name="file" id="file" accept=".jpg, .png, .jpeg" style={{display:"none"}} onChange={(e) => handlePicture(e)}/>
                         </label>
                         <div className="shareOption">
                             <LocationOnOutlined className='shareIcon'/>
                             <span className="shareOptionText">Localisation</span>
                         </div>
                     </div>
-                    <button className="shareButton" type='submit'>Envoyez</button>
+                    <button className="shareButton" type='submit'>Envoyer</button>
+                    { message || postPicture ? (
+                        <button className="cancelButton" onClick={cancelPost}>Annuler</button>
+                    ) : null }
                 </form>
             </div>
+            </>
+            )}
         </div>
     )
 }

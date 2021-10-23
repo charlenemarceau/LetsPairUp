@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
 } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login/Login";
@@ -44,17 +44,26 @@ function App() {
     <UidContext.Provider value={uid}>
       <Router>
         {!uid ? (
-        <Route path="/login">
-            <Login/>
-          </Route>) : (
-            <>
-            <Switch>
-          <Route exact path="/"> 
-          <Home/>
+        <>
+          <Redirect exact from="/" to="/login"/>
+          <Route path="/login">
+              <Login/>
           </Route>
           <Route path="/register">
-            <Register/>
+              <Register/>
           </Route>
+        </>
+          ) : (
+        <>
+          <Redirect exact from="/" to="/home"/>
+            <Route path="/home">
+              <Home/>
+            </Route>
+          <Switch>
+            <Route path="/login">
+              <Login/>
+            </Route>
+          </Switch>
           <Route path="/profile/:username">
             <Profile/>
           </Route>
@@ -64,9 +73,8 @@ function App() {
           <Route path="/questions">
             <Question/>
           </Route>
-          <Redirect to='/login'/>
-        </Switch>
-            </>)}
+          <Switch/>
+        </>)}
       </Router>
     </UidContext.Provider>
   );

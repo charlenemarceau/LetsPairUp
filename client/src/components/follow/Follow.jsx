@@ -8,7 +8,6 @@ import FollowHandler from '../followHandler/FollowHandler';
 function Follow() {
     const userData = useSelector((state) => state.userReducer);
     const usersData = useSelector((state) => state.usersReducer);
-    const dispatch = useDispatch();
     const [followingPopup, setFollowingPopup] = useState(false);
     const [followersPopup, setFollowersPopup] = useState(false);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;

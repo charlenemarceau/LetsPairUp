@@ -16,7 +16,6 @@ export const dateParserPost = (num) => {
   let options = {
       hour: "2-digit",
       minute: "2-digit",
-      weekday:"long",
       year: "numeric",
       month: "short",
       day:"numeric",
@@ -27,6 +26,19 @@ export const dateParserPost = (num) => {
 
       return date.toString();
 
+}
+
+export const timestampParser = (num) => {
+    let options = {
+      hour: "2-digit",
+      minute: "2-digit",
+      weekday:"long",
+      year: "numeric",
+      month: "short",
+      day:"numeric",
+};
+  let date = new Date(num).toLocaleDateString('fr-FR', options);
+  return date.toString();
 }
 
 export const isEmpty = (value) => {

@@ -7,14 +7,14 @@ const morgan = require("morgan");
 const cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const cors = require('cors');
-const multer = require('multer');
-const path = require ('path');
+
 
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
 const pinRoute = require("./routes/pins");
 const questionRoute = require("./routes/questions");
+const uploadRoute = require('./routes/upload');
 const { checkUser, requireAuth} = require("./middleware/auth.middleware")
 
 dotenv.config();
@@ -47,38 +47,14 @@ app.get('/jwtid', requireAuth, (req, res) => {
   res.status(200).send(res.locals.user._id)
 })
 
-// multer 
-// instauring destination path
-//The folder to which the file has been saved
-//	The name of the file within the destination
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, req.body.name);
-  },
-});
-  
-const upload = multer({ storage });
-// upload our file automatically
-app.post("/api/upload", upload.single("file"), (req, res) => {
-  try {
-    return res.status(200).json("File uploded successfully");
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-// path
-app.use('/images', express.static(path.join(__dirname, "public/images")));
 
 // routes
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/pins", pinRoute);
-app.use("/api/questions", questionRoute);  
+app.use("/api/questions", questionRoute);
+app.use("/api/upload", uploadRoute);
 
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,

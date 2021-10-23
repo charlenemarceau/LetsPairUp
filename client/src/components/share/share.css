@@ -70,7 +70,7 @@
     align-items: center;
 }
 
-.shareButton{
+.shareButton, .cancelButton{
     border: none;
     padding: 7px;
     border-radius: 5px;
@@ -97,3 +97,4 @@
     right: 20PX;
     cursor: pointer;
 }
+

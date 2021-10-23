@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
 import "./register.css";
-import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import Login from "../Login/Login";
 

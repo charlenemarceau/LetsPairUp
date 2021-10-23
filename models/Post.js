@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const PostSchema = new mongoose.Schema({
-    userId: {
+    posterId: {
         type: String,
         required: true,
     },
@@ -13,9 +13,6 @@ const PostSchema = new mongoose.Schema({
     image: {
         type: String,
     },
-    video: {
-        type: String,
-    },
     comments: {
         type: [{
             commenterId: String,
@@ -25,9 +22,9 @@ const PostSchema = new mongoose.Schema({
         }],
         required: true,
     },
-    likes: {
-        type: Array,
-        default: [],
+    likers: {
+        type: [String],
+        required: true,
     }
     },
     {

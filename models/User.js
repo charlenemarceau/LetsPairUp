@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema(
         },
         avatar: {
             type: String,
-            default: ""
+            default: "./uploads/profil/random-user.jpg"
         },
         age: {
             type: Number,
@@ -59,6 +59,9 @@ const UserSchema = new mongoose.Schema(
         following: {
             type: [String],
             default: ""
+        },
+        likes: {
+            type: [String],
         },
         isAdmin: {
             type: Boolean,

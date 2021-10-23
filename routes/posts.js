@@ -1,15 +1,55 @@
 const router = require("express").Router();
 const Post = require("../models/Post");
 const User = require("../models/User");
+const fs = require("fs");
+const multer = require('multer');
+const upload = multer();
+const { promisify } = require("util");
+const pipeline = promisify(require("stream").pipeline);
+const { uploadErrors } = require('../Utils/errors.utils');
 
 // create a post
-router.post('/', async (req, res) => {
-    const newPost = new Post(req.body);
+router.post('/', upload.single('file'), async (req, res) => {
+    let fileName;
+    // if image then verify file type and size
+    if (req.file !== null) {
+      try {
+        if (
+          // accept only jpg, png and jpeg
+            req.file.detectedMimeType !== "image/jpg" &&
+            req.file.detectedMimeType !== "image/png" &&
+            req.file.detectedMimeType !== "image/jpeg"
+        )
+          throw Error("invalid file");
+  
+        if (req.file.size > 500000) throw Error("max size");
+      } catch (err) {
+        const errors = uploadErrors(err);
+        return res.status(201).json({ errors });
+      }
+      // create file name
+      const fileName = req.body.userId + Date.now() + ".jpg";
+      // create path
+      await pipeline(
+        req.file.stream,
+        fs.createWriteStream(
+          `${__dirname}/../client/public/uploads/posts/${fileName}`
+        )
+      );
+    }
+  
+    const newPost = new Post({
+      posterId: req.body.posterId,
+      message: req.body.message,
+      // if not null, create path
+      image: req.file !== null ? "./uploads/posts/" + fileName : "",
+      comments: [],
+    });
     try {
         const savedPost = await newPost.save();
         res.status(200).json(savedPost)
     } catch (err) {
-        res.status(500).json(err)
+        res.status(400).json(err)
     }
 })
 
@@ -51,27 +91,66 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
-// like and dislike a post
-router.put("/:id/like", async (req, res) => {
+// like a post
+router.patch("/:id/like", async (req, res) => {
     try {
         // find the post
         const post = await Post.findById(req.params.id);
+        // find the current user
+        const user = await User.findById(req.body.userId);
         // check if current user does not already liked the post
-        if (!post.likes.includes(req.body.userId)) {
+        if (!post.likers.includes(req.body.userId)) {
             // if not already liked, push current user id in the posts' likes
             await post.updateOne({
                 $push: {
-                    likes: req.body.userId
+                    likers: req.body.userId
                 }
-            });
+            },{ new: true });
+            (err, docs) => {
+                if (err) return res.status(400).send(err);
+              }
+            // if (!user.likes.includes(req.params.id)) {
+            await user.updateOne({
+                $push: {
+                    likes: req.params.id
+                }
+            }, {new: true});
+            // }
             res.status(200).json("The post has been liked.")
-        } else { // if already liked, dislike the post
+        } else { // if already liked, error message
+            res.status(200).json("You already like this post.")
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+})
+
+// unlike a post
+router.patch("/:id/unlike", async (req, res) => {
+    try {
+        // find the post
+        const post = await Post.findById(req.params.id);
+        const user = await User.findById(req.body.userId);
+        // check if current user already liked the post
+        if (post.likers.includes(req.body.userId)) {
+            // if  already liked, pull current user id of the posts' likers
             await post.updateOne({
                 $pull: {
-                    likes: req.body.userId
+                    likers: req.body.userId
                 }
-            })
-            res.status(200).json("The post has been disliked.")
+            }, { new: true });
+            // and pull the post id from the user's likes
+            await user.updateOne({
+                $pull: {
+                    likes: req.params.id
+                }
+            }, {new: true});
+            res.status(200).json("The post has been disliked.");
+            (err, docs) => {
+                if (err) return res.status(400).send(err);
+              }
+        } else { // else message error
+            res.status(200).json("You don't like this post")
         }
     } catch (err) {
         res.status(500).json(err);
@@ -168,33 +247,24 @@ router.post('/comment-post/:id', async (req, res) => {
 router.delete('/delete-comment-post/:id', async (req, res) => {
     try {
         // find post
-        const post = await Post.findByIdAndUpdate(req.params.id);
-        // get comment id from the request
-        const TheComment = req.body.commentId;
-        console.log(post, TheComment)
-        // get comment from post and filter to only keep the one comment to delete. valueOf to get the value of the object id in string
-        const currentComment = post.comments.filter((comment) => TheComment === comment._id.valueOf())[0];
-        // check if empty
-        if (currentComment.length) {
-            // if not, pull the comment from the data
-            await Post.findByIdAndUpdate(req.params.id, {
-                $pull: {
-                    comments: {
-                        _id: currentComment._id,
-                    }
+        return Post.findByIdAndUpdate(req.params.id, {
+        // get comment id from the request and pull it from the comments
+            $pull: {
+                comments: {
+                    _id: req.body.commentId,
                 }
-            });
-            res.status(200).json("The comment has been deleted.")
-        } else {
-            res.status(500).send(err)
-        }
+            }
+        },
+        // console.log(req.params.id, req.body.commentId),
+        { new: true },
         (err, docs) => {
             if (!err) { 
-                return res.send(docs);
+                return res.status(200).json("The comment has been deleted." + docs)
+
             } else {
               return res.status(400).send(err);
             }
-        }
+        })
     } catch (err) {
         return res.status(400).send(err);
     }
