@@ -22,4 +22,21 @@ router.post("/", async (req, res) => {
     }
   });
   
+  // delete a pin
+router.delete('/:id', async (req, res) => {
+  try {
+      // find the post
+      const pin = await Pin.findById(req.params.id);
+      // check if current user posted the message
+      if (pin.userId === req.body.userId) {
+          // if yes, delete message
+          await pin.deleteOne();
+          res.status(200).json("Your pin has been deleted")
+      } else {
+          res.status(403).json("You can delete only your pins")
+      }
+  } catch (err) {
+      res.status(500).json(err)
+  }
+})
   module.exports = router;

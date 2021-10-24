@@ -1,57 +1,39 @@
-import React, { useState,  useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import ReactMapGL, {Marker, Popup}  from 'react-map-gl';
 import { Room } from '@material-ui/icons';
-import axios from "axios";
 import {Link} from 'react-router-dom';
-// import { AuthContext } from "../../context/AuthContext";
+import { UidContext } from "../AppContext";
+import { useSelector, useDispatch } from 'react-redux';
+import { addPin, getPins } from "../../actions/pin.actions";
+import { isEmpty } from '../../Utils';
 
 
 
 // use of the geolocalisation 
 // const geolocateControlStyle= {
-//   right: 10,
-//   top: 10
-// };
-
-function Map( {pin}) {
-  const [pins, setPins] = useState([]);
-  const [user, setUser] = useState({});
-  const [currentPlaceId, setCurrentPlaceId] = useState(null);
-  const [newPlace, setNewPlace] = useState(null);
-  const [link, setLink] = useState(false);
-  const [viewport, setViewport] = useState({
-    width: "80vw",
+  //   right: 10,
+  //   top: 10
+  // };
+  
+  function Map( {pin}) {
+    const userData = useSelector((state) => state.userReducer) // get user data
+    const [pins, setPins] = useState([]);
+    const [currentPlaceId, setCurrentPlaceId] = useState(null);
+    const [newPlace, setNewPlace] = useState(null);
+    const [link, setLink] = useState(false);
+    const dispatch = useDispatch()
+    const [viewport, setViewport] = useState({
+    width: "73.8vw",
     height: "100vh",
     latitude: 37.090240,
     longitude: -95.712891,
     zoom: 3
   });
 
-//   useEffect (() => {
-//     const fetchUser = async () => {
-//         const res = await axios.get(`/users?userId=${pin.userId}`);
-//         setUser(res.data)
-//         console.log(res.data)
-//     };
-//     fetchUser();
-// }, [ pins.userId])
-
-  useEffect(() => {
-    const getPins = async () => {
-      try {
-          const res = await axios.get('/pins');
-          setPins(res.data)
-      }catch(err) {
-        console.log(err)
-      }
-    }
-    getPins();
-  }, [])
-
-  // const handleMarkerClick = (id, lat, long) => {
-  //   setCurrentPlaceId(id);
-  //   setViewport({...viewport, latitude: lat, longitude:long})
-  // }
+  const handleMarkerClick = (id, lat, long) => {
+    setCurrentPlaceId(id);
+    setViewport({...viewport, latitude: lat, longitude:long})
+  }
 
   const handleAddClick = (e) => {
     // fetching the latitude and longitude on the click's current place
@@ -62,22 +44,37 @@ function Map( {pin}) {
     });
    }
 
-   const handleSubmit = async (e) => {
-     e.preventDefault();
+   const handleSubmit = async () => {
+    //  e.preventDefault();
     //  const newPin = {
-    //   userId: currentUser,
-    //   link: `/profile/${currentUser.username}`,
+    //   userId: userData._id,
+    //   link: `/profil/${userData.username}`,
     //   lat: newPlace.lat,
     //   long: newPlace.long,
     //  }
+    if (newPlace) {
+      const data = new FormData();
+      data.append('userId', userData._id);
+      data.append('link', link);
+      data.append('lat', newPlace.lat);
+      data.append('long', newPlace.long);
+      await dispatch(addPin(data));
+      dispatch(getPins());
+      setNewPlace(null);
+    
     //  try {
-    //     const res = await axios.post("/pins", newPin);
-    //     setPins([...pins, res.data]);
-    //     setNewPlace(null);
+    //     // const res = await axios.post("/pins", newPin);
+    //     // setPins([...pins, res.data]);
+    //     // setNewPlace(null);
     //  } catch (err) {
-    //    console.log(err)
+      //  console.log(err)
     //  }
+    } else {
+    alert("Veuillez entrer un message")
+    }
    }
+
+
   return (
     <ReactMapGL className='mapComponent'
       {...viewport}
@@ -93,39 +90,40 @@ function Map( {pin}) {
         trackUserLocation={true}
         auto
       /> */}
-      {pins.map((p) => (
-        <>
-        <Marker
-          latitude={p.lat}
-          longitude={p.long}
-          offsetLeft={-3.5 * viewport.zoom}
-          offsetTop={-7 * viewport.zoom}
-        >
-          {/* <Room className='HereIcon' style={{fontSize:viewport.zoom * 7, cursor: "pointer", color: p.userId === currentUser ? '#ffbf69' : '#2ec4b6'}}
-           onClick={() => handleMarkerClick(p._id, p.lat, p.long)}/> */}
-        </Marker>
-          {p._id === currentPlaceId && (
-            <Popup
-              key={p._id}
-              latitude={p.lat}
-              longitude={p.long}
-              closeButton={true}
-              closeOnClick={false}
-              onClose={() => setCurrentPlaceId(null)}
-              anchor="left"
-            >
-              <div className="card">
-              <label>Au pair</label>
-              <h4 className="username">{user.username}</h4>
-              <label>Lien profil</label>
-              <Link to={`/profile/${user.username}`}>
-              <p>Profil</p>
-              </Link>
-            </div>
-            </Popup>
-          )}
-          </>
-        ))}
+      {!isEmpty(pins[0]) && (
+        pins.map((pin) => {
+          <>
+          <Marker
+            latitude={pin.lat}
+            longitude={pin.long}
+            offsetLeft={-3.5 * viewport.zoom}
+            offsetTop={-7 * viewport.zoom}
+          >
+            <Room className='HereIcon' style={{fontSize:viewport.zoom * 7, cursor: "pointer", color: pin.userId === userData._id ? '#ffbf69' : '#2ec4b6'}}
+             onClick={() => handleMarkerClick(pin._id, pin.lat, pin.long)}/>
+          </Marker>
+            {pin._id === currentPlaceId && (
+              <Popup
+                key={pin._id}
+                latitude={pin.lat}
+                longitude={pin.long}
+                closeButton={true}
+                closeOnClick={false}
+                onClose={() => setCurrentPlaceId(null)}
+                anchor="left"
+              >
+                <div className="card">
+                <label>Au pair</label>
+                {/* <h4 className="username">{user.username}</h4> */}
+                <label>Lien profil</label>
+                <Link to="/profil">
+                <p>Profil</p>
+                </Link>
+              </div>
+              </Popup>
+            )}
+            </>
+        }))}
         {newPlace && (
           <>
             <Marker
@@ -154,7 +152,7 @@ function Map( {pin}) {
                 <form onSubmit={handleSubmit}>
                   <div>
                 <input type="checkbox" onChange={(e) => setLink(!link)}/>
-                <label className="CheckBoxLabel" for="subscribeNews">Souhaitez-vous mettre un lien vers votre profil ?</label></div>
+                <label className="CheckBoxLabel" for="subscribeNews">Souhaitez-vous mettre votre localisation ?</label></div>
                   <button type="submit" className="submitButton">
                     Ajouter votre localisation
                   </button>

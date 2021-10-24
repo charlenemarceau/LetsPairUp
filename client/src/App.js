@@ -43,38 +43,22 @@ function App() {
   return (
     <UidContext.Provider value={uid}>
       <Router>
-        {!uid ? (
-        <>
-          <Redirect exact from="/" to="/login"/>
-          <Route path="/login">
-              <Login/>
-          </Route>
-          <Route path="/register">
-              <Register/>
-          </Route>
-        </>
-          ) : (
-        <>
-          <Redirect exact from="/" to="/home"/>
-            <Route path="/home">
-              <Home/>
-            </Route>
+          <>
           <Switch>
-            <Route path="/login">
-              <Login/>
-            </Route>
+            {!uid ? (
+              <>
+              <Route path="/login" exact component={Login}/>
+              <Route path="/register" exact component={Register}/></>
+            ) : ( 
+              <>
+              <Route path="/" exact component={Home} />
+              <Route path="/profil" exact component={Profile} />
+              <Route path="/map" exact component={Map} />
+              <Route path="/questions" exact component={Question} /></>
+            )}
+            <Redirect to="/" />
           </Switch>
-          <Route path="/profile/:username">
-            <Profile/>
-          </Route>
-          <Route path="/map">
-            <Map/>
-          </Route>
-          <Route path="/questions">
-            <Question/>
-          </Route>
-          <Switch/>
-        </>)}
+          </>
       </Router>
     </UidContext.Provider>
   );

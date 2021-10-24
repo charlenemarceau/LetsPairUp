@@ -1,13 +1,12 @@
 import React, {useContext} from 'react';
 import './sidebar.css';
-import { HelpOutlineOutlined, CardTravelOutlined, PersonOutlineOutlined, ChatOutlined, MapOutlined } from '@material-ui/icons';
+import { HelpOutlineOutlined, CardTravelOutlined, PersonOutlineOutlined, ChatOutlined, MapOutlined, InfoOutlined } from '@material-ui/icons';
 import {Link} from "react-router-dom";
 import { UidContext } from "../AppContext";
 import { useSelector } from 'react-redux';
+import Trend from '../trend/Trend';
 
-
-
-function Sidebar() {
+function SidebarProfil() {
     const uid = useContext(UidContext); // get the context
     const userData = useSelector((state) => state.userReducer); // get the data from the userReducer
   
@@ -37,13 +36,19 @@ function Sidebar() {
                     <li className="sidebarListItem">
                         < HelpOutlineOutlined className='sidebarIcon' />
                         <Link to="/questions" style={{textDecoration:"none"}}>
-                        <span className="sidebarListItemText">Questions</span>
+                        <span className="sidebarListItemText">Le coin questions</span>
                         </Link>
                     </li>
                     <li className="sidebarListItem">
                         < MapOutlined className='sidebarIcon' />
                         <Link to="/map" style={{textDecoration:"none"}}>
                         <span className="sidebarListItemText">Carte des Au Pairs</span>
+                        </Link>
+                    </li>
+                    <li className="sidebarListItem">
+                        < InfoOutlined className='sidebarIcon' />
+                        <Link to="/Advice" style={{textDecoration:"none"}}>
+                        <span className="sidebarListItemText">Les conseils</span>
                         </Link>
                     </li>
                     <li className="sidebarListItem">
@@ -54,14 +59,12 @@ function Sidebar() {
                     </li>
                 </ul>
                 <hr className="sidebarHr" />
-                {/* <ul className="sidebarFriendList">
-                    {userData.following.map((u) => (
-                        <Followings key={u.id} user={u} />
-                    ))}
-                </ul> */}
+                    <div className="trendingWrapper">
+                        <Trend />
+                    </div>
             </div>
         </div>
     )
 }
 
-export default Sidebar
+export default SidebarProfil;

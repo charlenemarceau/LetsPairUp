@@ -9,7 +9,13 @@
     --blue-color: #2ec4b6;
     --pale-blue-color: #cbf3f0;
     --orange-color:#ffbf69;
+    --pale-orange-color:#fdd39c;
     --grey-color:#707070;
     --dark-color:#2c2b2b;
     --white-color: #ffffff;
+}
+
+.error {
+    color: red;
+    font-weight: 600;
 }

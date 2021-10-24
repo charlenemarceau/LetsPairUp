@@ -3,9 +3,12 @@
 }
 
 .profileRight{
-    flex: 9;
+    flex: 7 6;
 }
 
+.profilRight {
+    width: 350px;
+}
 .profileCover{
     height: 320px;
     position: relative;

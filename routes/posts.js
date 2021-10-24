@@ -28,7 +28,7 @@ router.post('/', upload.single('file'), async (req, res) => {
         return res.status(201).json({ errors });
       }
       // create file name
-      const fileName = req.body.userId + Date.now() + ".jpg";
+      fileName = req.body.userId + Date.now() + ".jpg";
       // create path
       await pipeline(
         req.file.stream,
@@ -42,7 +42,7 @@ router.post('/', upload.single('file'), async (req, res) => {
       posterId: req.body.posterId,
       message: req.body.message,
       // if not null, create path
-      image: req.file !== null ? "./uploads/posts/" + fileName : "",
+      image: req.file !== null ? `./uploads/posts/${fileName}` : "",
       comments: [],
     });
     try {

@@ -10,7 +10,6 @@ import DeletePost from './DeletePost';
 import Comments from "./Comment";
 
 function Post( {post} ) {
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdated, setIsUpdated] = useState(false);
     const [textUpdate, setTextUpdate] = useState(null);
@@ -52,7 +51,7 @@ function Post( {post} ) {
                         <img src={!isEmpty(usersData[0]) && usersData
                         .map((user) => {
                             if (user._id === post.posterId) {
-                                return user.avatar ? PF+user.avatar : PF + "random-user.jpg"
+                                return user.avatar
                             }
                             else return null
                         }).join("")} alt="" className='postProfileImg'/>
@@ -107,7 +106,7 @@ function Post( {post} ) {
                         </div>
                     )}
                     
-                    {post.image && <img className='postImg' src={PF+post.image} alt="" />}
+                    {post.image && <img className='postImg' src={post.image} alt="" />}
                 </div>
                 <div className="postBottom">
                     <div className="postBottomLeft">

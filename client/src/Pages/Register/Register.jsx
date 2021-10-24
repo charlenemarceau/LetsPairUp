@@ -11,7 +11,7 @@ export default function Register() {
   const [age, setAge] = useState(''); 
   const [city, setCity] = useState(''); 
   const [from, setFrom] = useState(''); 
-  const [arrivedDate, setArrivedDate] = useState(''); 
+  // const [arrivedDate, setArrivedDate] = useState('');
   const [password, setPassword] = useState("");
   const [controlPassword, setControlPassword] = useState("");
 
@@ -52,7 +52,7 @@ export default function Register() {
         age,
         city,
         from,
-        arrivedDate,
+        // arrivedDate,
       },
     })
       .then((res) => {
@@ -104,8 +104,8 @@ export default function Register() {
             <input placeholder="Votre âge" type="number" min="18" required className="loginInputRegister"
              onChange={(e) => setAge(e.target.value)} value={age}/>
             <div className="age error"></div>
-            <input placeholder="Date d'arrivé aux Etats-Unis" type="date" required className="loginInputRegister"
-              onChange={(e) => setArrivedDate(e.target.value)} value={arrivedDate}/>
+            {/* <input placeholder="Date d'arrivé aux Etats-Unis" type="date" required className="loginInputRegister"
+              onChange={(e) => setArrivedDate(e.target.value)} value={arrivedDate}/> */}
             <input placeholder="Mot de passe" type="password" required minLength="6" className="loginInputRegister" 
             onChange={(e) => setPassword(e.target.value)} value={password}/>
             <div className="password error"></div>

@@ -20,7 +20,7 @@ function Logout() {
         })
         .then(() => removeCookie('jwt'))
         .catch((err) => console.log(err))
-        // redirect to the Home page
+        // redirect to the login page
         window.location = "/login";
     };
 

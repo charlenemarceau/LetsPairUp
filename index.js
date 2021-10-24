@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const fs = require('fs');
+const multer = require('multer');
+const upload = multer();
 const cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const cors = require('cors');
@@ -54,7 +57,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/pins", pinRoute);
 app.use("/api/questions", questionRoute);
-app.use("/api/upload", uploadRoute);
+app.use("/api/upload", upload.single('file'), uploadRoute);
 
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,

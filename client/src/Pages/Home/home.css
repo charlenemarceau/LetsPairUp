@@ -2,3 +2,10 @@
     display: flex;
     width: 100%;
 }
+
+.rightbar .trendingContainer {
+    margin: 20px 15px;
+}
+.rightbar .trendingContainer h3 {
+    margin: 5px;
+}

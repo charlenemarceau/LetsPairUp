@@ -8,15 +8,11 @@ import { useDispatch } from 'react-redux';
 import { updateBio } from '../../actions/user.actions'
 
 const UpdateProfil = () => {
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
     const [bio, setBio] = useState('');
     const [updateForm, setUpdateForm] = useState(false);
     const userData = useSelector((state) => state.userReducer);
     const [updateProfilModal, setUpdateProfilModal] = useState(true);
-
-    // const usersData = useSelector((state) => state.usersReducer);
-    // const error = useSelector((state) => state.errorReducer.userError);
+    const error = useSelector((state) => state.errorReducer.userError);
     const dispatch = useDispatch();
 
     const handleUpdate =  () => {
@@ -24,24 +20,22 @@ const UpdateProfil = () => {
         setUpdateForm(false);
     }
 
-
     return (
         <>
-        {/* <LeftNav /> */}
             { updateProfilModal ? (
                 <>
             <div className="profil-container">
             <div onClick={() => setUpdateProfilModal(false)} className="crossUpdate">< CloseOutlined /> </div>
             <h1 className='updateTitle'>Votre profil {userData.username}</h1>
             <div className="updateContainer">
-                <div className="left-part">
+                <div className="left-part-update">
                     <h3>Photo de profil</h3>
-                    <img className="updateUserImg" src={userData.avatar ? PF + userData.avatar : PF + "random-user.jpg"} alt=""/> 
+                    <img src={userData.avatar} alt="user-pic" className='updateUserImg' />
                     <UploadImg />
-                    {/* <p>{error.maxSize}</p>
-                    <p>{error.format}</p> */}
+                    <p>{error.maxSize}</p>
+                    <p>{error.format}</p>
                 </div>
-                <div className="right-part">
+                <div className="right-part-update">
                     <div className="bio-update">
                         <h3>Bio</h3>
                         {updateForm === false && (

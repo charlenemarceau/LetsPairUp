@@ -1,5 +1,5 @@
-const User = require('../models/User');
 const router = require("express").Router();
+const User = require('../models/User');
 const fs = require('fs');
 const multer = require('multer');
 const upload = multer();
@@ -7,7 +7,7 @@ const { promisify } = require('util');
 const pipeline = promisify(require('stream').pipeline);
 const { uploadErrors } = require('../Utils/errors.utils');
 
-router.post("/", upload.single('file'), async (req, res) => {
+router.post("/", async (req, res) => {
     try {
       if (
       // accept only jpg, png and jpeg
@@ -23,8 +23,9 @@ router.post("/", upload.single('file'), async (req, res) => {
       return res.status(201).json({errors});
     }
     // image name will be the user's username and file will changed automatically without creating new file
+    // unique username so unique fileName for avatars
     const fileName = req.body.name + ".jpg"; 
-    // create path
+    // create path for file
     await pipeline(
       req.file.stream,
       fs.createWriteStream(
@@ -34,15 +35,19 @@ router.post("/", upload.single('file'), async (req, res) => {
     try {
       await User.findByIdAndUpdate(
         req.body.userId,
-        { $set : {avatar: "./uploads/profil/" + fileName}},
-        { new: true, upsert: true, setDefaultsOnInsert: true},
+        { $set : {
+            avatar: "./uploads/profil/" + fileName
+          }},
+        { new: true,
+          upsert: true,
+          setDefaultsOnInsert: true},
         (err, docs) => {
           if (!err) return res.send(docs);
-          else return res.status(500).json({ err });
+          else return res.status(400).send({ message: err });
         }
       );
     } catch (err) {
-      return res.status(500).send({ err });
+      return res.status(500).json(err);
     }
 })
 

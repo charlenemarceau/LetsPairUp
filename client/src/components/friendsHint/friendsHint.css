@@ -1,0 +1,57 @@
+.get-friends-container {
+    background: var(--pale-orange-color);
+    border-radius: 15px;
+    padding: 10px;
+    width: 86%;
+    margin: 20px 15px;
+}
+
+.get-friends-container li {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.get-friends-container img {
+    width: 45px;
+    height: 45px;
+    border-radius: 15px;
+}
+
+.trendingPost {
+    background: var(--pale-pink-color);
+    margin: 5px;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.get-friends-container h4 {
+    text-align: center;
+    margin: 5px;
+}
+
+.get-friends-container p {
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.trendingContainer img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.trendingContainer a {
+    text-decoration: none;
+    color: var(--dark-color);
+    text-align: justify;
+}
+
+.trendingContainer span {
+    display: flex;
+    justify-content: flex-end;
+    font-weight: 600;
+}

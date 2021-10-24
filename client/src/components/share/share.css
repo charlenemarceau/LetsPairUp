@@ -1,8 +1,8 @@
 .share {
     width: 100%;
-    /* height: 170px; */
     border-radius: 10px;
-    background-color: var(--pale-pink-color);
+    background-color: var(--white-color);
+    border: 2px solid var(--pale-orange-color);
     -webkit-box-shadow: 9px 9px 15px -2px rgba(0,0,0,0.24); 
     box-shadow: 9px 9px 15px -2px rgba(0,0,0,0.24);
 }
@@ -27,7 +27,7 @@
 .shareInput {
     border: none;
     width: 80%;
-    background-color: var(--pale-pink-color);
+    background-color: var(--white-color);
 
   }
   
@@ -88,7 +88,8 @@
 
 .shareImg {
     width: 100%;
-    object-fit: cover;
+    height: 450px;
+    border-radius: 15px;
 }
 
 .shareCancelImg {

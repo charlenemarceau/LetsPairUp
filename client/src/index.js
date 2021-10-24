@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 import App from './App';
 import rootReducer from './reducers/rootReducer';
 import {getUsers } from './actions/users.actions';
+import {getPosts } from './actions/post.actions';
 
 // dev tools
 import { composeWithDevTools } from "redux-devtools-extension";
@@ -16,6 +17,7 @@ const store = createStore (
 )
 
 store.dispatch(getUsers());
+store.dispatch(getPosts());
 
 ReactDOM.render(
     <Provider store={store}>

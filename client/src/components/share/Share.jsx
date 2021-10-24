@@ -13,7 +13,7 @@ function Share() {
     const [postPicture, setPostPicture] = useState(null);
     const [file, setFile] = useState();
     const userData = useSelector((state) => state.userReducer);
-    // const error = useSelector((state) => state.errorReducer.postError);
+    const error = useSelector((state) => state.errorReducer.postError);
     const dispatch = useDispatch();
 
 
@@ -49,10 +49,6 @@ function Share() {
         if (!isEmpty(userData)) setIsLoading(false);
     }, [userData])
 
-
-
-
-    
     return (
         <div className="share">
             {isLoading ? (
@@ -84,6 +80,8 @@ function Share() {
                             <span className="shareOptionText">Localisation</span>
                         </div>
                     </div>
+                    { !isEmpty(error.format) && <p className='error'>{error.format}</p>}
+                    { !isEmpty(error.maxSize) && <p className='error'>{error.maxSize}</p>}
                     <button className="shareButton" type='submit'>Envoyer</button>
                     { message || postPicture ? (
                         <button className="cancelButton" onClick={cancelPost}>Annuler</button>

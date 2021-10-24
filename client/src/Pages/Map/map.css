@@ -3,6 +3,13 @@
     width: 100%;
 }
 
+.mapPageComponent {
+    display: flex;
+}
+
+.left-part-map {
+    width: 340px;
+}
 .mapComponent{
     margin: 5px;
  }

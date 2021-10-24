@@ -10,7 +10,6 @@ function Follow() {
     const usersData = useSelector((state) => state.usersReducer);
     const [followingPopup, setFollowingPopup] = useState(false);
     const [followersPopup, setFollowersPopup] = useState(false);
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
     return (
         <div className='followContainer'>
@@ -29,7 +28,7 @@ function Follow() {
                                     if (user._id === userData.following[i]) {
                                         return (
                                             <li key={user._id}>
-                                                <img className="user-avatar" src={user.avatar ? PF + user.avatar : PF + "random-user.jpg"} alt=""/>
+                                                <img className="user-avatar" src={user.avatar} alt=""/>
                                                 <h3>{user.username}</h3>
                                                 <div className="follow-handler">
                                                     <FollowHandler idToFollow={user._id} type={"suggestion"}/>
@@ -37,7 +36,6 @@ function Follow() {
                                             </li>
                                         )
                                     } 
-                                
                                 }return null;
                             })}
                         </ul>
@@ -45,7 +43,7 @@ function Follow() {
                 </div>
                     }
                  {followersPopup && 
-                <div className="popup-profil-container">
+                <div className="popup-profil-container ">
                     <div className="modal">
                         <h2>Followers</h2>
                         <span className="cross" onClick={() => setFollowersPopup(false)}>< CloseOutlined /></span>
@@ -55,7 +53,7 @@ function Follow() {
                                     if (user._id === userData.followers[i]) {
                                         return (
                                             <li key={user._id}>
-                                                <img className="user-avatar" src={user.avatar ? PF + user.avatar : PF + "random-user.jpg"} alt=""/>
+                                                <img className="user-avatar" src={user.avatar} alt=""/>
                                                 <h3>{user.username}</h3>
                                                 <div className="follow-handler">
                                                 <FollowHandler idToFollow={user._id} type={"suggestion"}/>

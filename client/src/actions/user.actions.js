@@ -24,23 +24,21 @@ export const getUser = (uid) => { // to fetch user
 export const uploadPicture = (data, userId) => {
     return (dispatch) => {
         return axios
-        .post(`${process.env.REACT_APP_API_URL}api/users/upload`, data,{
-            data, userId
-        }) // send data to database
+        .post(`${process.env.REACT_APP_API_URL}api/users/upload`, data)// send data to database
         .then((res) => {
-            // if (res.data.errors) {
-            //     dispatch({
-            //         type: GET_USER_ERRORS,
-            //         payload: res.data.errors
-            //     })
-            // } else {
-            //     dispatch({
-            //         type: GET_USER_ERRORS,
-            //         payload: ""
-            //     })
-            // }
+            if (res.data.errors) {
+                dispatch({
+                    type: GET_USER_ERRORS,
+                    payload: res.data.errors
+                })
+            } else {
+                dispatch({
+                    type: GET_USER_ERRORS,
+                    payload: ""
+                })
+            }
             return axios
-         .get(`${process.env.REACT_APP_API_URL}api/users?userId=${userId}`)
+         .get(`${process.env.REACT_APP_API_URL}api/users/${userId}`)
          .then((res) => {
              dispatch({ type: UPLOAD_PICTURE, payload: res.data.avatar })
          })

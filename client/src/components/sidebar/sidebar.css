@@ -1,10 +1,11 @@
 .sidebar {
     flex:3;
     height: calc(100vh - 50px);
-    background-color: var(--pale-blue-color);
+    background-color: var(--pale-pink-color);
     overflow-y: scroll;
     position: sticky;
     top: 50px;
+    border-top: 7px solid var(--pale-blue-color);
 }
 
 ::-webkit-scrollbar {

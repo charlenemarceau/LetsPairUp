@@ -1,10 +1,9 @@
 import React from 'react';
-import Sidebar from '../../components/sidebar/Sidebar';
 import Topbar from '../../components/topbar/Topbar';
 import Thread from '../../components/thread/Thread';
-import Rightbar from '../../components/rightbar/Rightbar';
+import RightbarHome from '../../components/rightbar/RightbarHome';
 import { useSelector } from "react-redux";
-
+import SidebarHome from '../../components/sidebar/SidebarHome';
 import './home.css';
 
 function Home() {
@@ -13,9 +12,9 @@ function Home() {
         <>
           <Topbar/>
           <div className="homeContainer">
-            <Sidebar/>
+            <SidebarHome/>
             <Thread username={userData.username}/>
-            <Rightbar />
+            <RightbarHome />
           </div>
         </>
     )
