@@ -7,7 +7,6 @@ import DeleteComment from './DeleteComment';
 
 
 function Comments({post}) {
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [text, setText] = useState("");
     const usersData = useSelector((state) => state.usersReducer);
     const userData = useSelector((state) => state.userReducer);
@@ -32,7 +31,7 @@ function Comments({post}) {
                         <div className="left-part">
                             <img src={ !isEmpty(usersData[0]) && usersData
                               .map((user) => {
-                                if (user._id === comment.commenterId) return PF+user.avatar;
+                                if (user._id === comment.commenterId) return user.avatar;
                                 else return null;
                               })
                               .join("")

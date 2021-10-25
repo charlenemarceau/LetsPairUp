@@ -18,13 +18,32 @@
     flex: 1;
 }
 
+.card label {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--orange-color);
+    text-align: center;
+}
+
 .card {
+    background: var(--pale-blue-color);
+    border-radius: 15px;
    width: 150px;
    height: 100px;
    display: flex;
    flex-direction: column;
    justify-content: space-around;
+   padding: 10px;
  }
+
+.CardInfo {
+    display: flex;
+    align-items: center;
+}
+
+.CardInfo h4 {
+    margin-left: 15px;
+}
 
 .mapComponent label {
     width: max-content;

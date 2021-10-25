@@ -1,23 +1,26 @@
-import React, { useState, useContext } from 'react';
-import ReactMapGL, {Marker, Popup}  from 'react-map-gl';
+import React, { useState, useEffect } from 'react';
+import ReactMapGL, {Marker, Popup, GeolocateControl}  from 'react-map-gl';
 import { Room } from '@material-ui/icons';
 import {Link} from 'react-router-dom';
-import { UidContext } from "../AppContext";
 import { useSelector, useDispatch } from 'react-redux';
-import { addPin, getPins } from "../../actions/pin.actions";
+import { getPins } from "../../actions/pin.actions";
 import { isEmpty } from '../../Utils';
+import axios from 'axios';
 
 
 
 // use of the geolocalisation 
-// const geolocateControlStyle= {
-  //   right: 10,
-  //   top: 10
-  // };
+const geolocateControlStyle= {
+    right: 10,
+    top: 10
+  };
   
   function Map( {pin}) {
+    const usersData = useSelector((state) => state.usersReducer) // get user data
     const userData = useSelector((state) => state.userReducer) // get user data
+    const pinsData = useSelector((state) => state.pinReducer) // get pin data
     const [pins, setPins] = useState([]);
+    const [loadPin, setLoadPin] = useState(true);
     const [currentPlaceId, setCurrentPlaceId] = useState(null);
     const [newPlace, setNewPlace] = useState(null);
     const [link, setLink] = useState(false);
@@ -29,6 +32,15 @@ import { isEmpty } from '../../Utils';
     longitude: -95.712891,
     zoom: 3
   });
+
+  useEffect(() => {
+    if (loadPin) {
+        dispatch(getPins());
+        setLoadPin(false);
+    }
+    else return null;
+  }, [loadPin, dispatch])
+
 
   const handleMarkerClick = (id, lat, long) => {
     setCurrentPlaceId(id);
@@ -43,36 +55,25 @@ import { isEmpty } from '../../Utils';
       long: longitude,
     });
    }
+   
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newPin = {
+      userId: userData._id,
+      lat: newPlace.lat,
+      long: newPlace.long,
+    };
 
-   const handleSubmit = async () => {
-    //  e.preventDefault();
-    //  const newPin = {
-    //   userId: userData._id,
-    //   link: `/profil/${userData.username}`,
-    //   lat: newPlace.lat,
-    //   long: newPlace.long,
-    //  }
-    if (newPlace) {
-      const data = new FormData();
-      data.append('userId', userData._id);
-      data.append('link', link);
-      data.append('lat', newPlace.lat);
-      data.append('long', newPlace.long);
-      await dispatch(addPin(data));
-      dispatch(getPins());
+    try {
+      const res = await axios.post("/pins", newPin);
+      setPins([...pins, res.data]);
       setNewPlace(null);
-    
-    //  try {
-    //     // const res = await axios.post("/pins", newPin);
-    //     // setPins([...pins, res.data]);
-    //     // setNewPlace(null);
-    //  } catch (err) {
-      //  console.log(err)
-    //  }
-    } else {
-    alert("Veuillez entrer un message")
+      window.location.reload()
+    } catch (err) {
+      console.log(err);
     }
-   }
+  };
+
 
 
   return (
@@ -90,8 +91,8 @@ import { isEmpty } from '../../Utils';
         trackUserLocation={true}
         auto
       /> */}
-      {!isEmpty(pins[0]) && (
-        pins.map((pin) => {
+          {!isEmpty(pinsData[0]) && 
+            pinsData.map((pin) => (
           <>
           <Marker
             latitude={pin.lat}
@@ -114,16 +115,31 @@ import { isEmpty } from '../../Utils';
               >
                 <div className="card">
                 <label>Au pair</label>
-                {/* <h4 className="username">{user.username}</h4> */}
-                <label>Lien profil</label>
-                <Link to="/profil">
-                <p>Profil</p>
-                </Link>
+                <div className="CardInfo">
+                <img src={!isEmpty(usersData[0]) && usersData
+                        .map((user) => {
+                            if (user._id === pin.userId) {
+                                return user.avatar
+                            }
+                            else return null
+                        }).join("")} alt="" className='postProfileImg' />
+                <h4 className="username">
+                  {!isEmpty(usersData[0]) && usersData
+                    .map((user) => {
+                      if (user._id === pin.userId) return user.username;
+                      else return null;
+                  }).join("") }</h4>
+                  </div>
+                  {!isEmpty(usersData[0]) && usersData
+                    .map((user) => {
+                      if (user._id === pin.userId) return user.city;
+                      else return null;
+                  }).join("") }
               </div>
               </Popup>
             )}
             </>
-        }))}
+            ))}
         {newPlace && (
           <>
             <Marker
@@ -135,7 +151,7 @@ import { isEmpty } from '../../Utils';
               <Room
                 style={{
                   fontSize: 7 * viewport.zoom,
-                  color: "tomato",
+                  color: "orange",
                   cursor: "pointer",
                 }}
               />
@@ -151,8 +167,7 @@ import { isEmpty } from '../../Utils';
               <div>
                 <form onSubmit={handleSubmit}>
                   <div>
-                <input type="checkbox" onChange={(e) => setLink(!link)}/>
-                <label className="CheckBoxLabel" for="subscribeNews">Souhaitez-vous mettre votre localisation ?</label></div>
+                <label className="CheckBoxLabel" htmlFor="subscribeNews">Souhaitez-vous mettre votre localisation ?</label></div>
                   <button type="submit" className="submitButton">
                     Ajouter votre localisation
                   </button>

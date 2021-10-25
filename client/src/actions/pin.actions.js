@@ -27,13 +27,21 @@ export const getPins = (num) => {
     }
 };
 
-export const addPin = (data) => {
-    return (dispatch) => {
-      return axios
-        .post(`${process.env.REACT_APP_API_URL}api/pins/`, data)
-        .catch((err) => console.log(err.response))
-    };
-};
+// export const addPin = (userId, lat, long) => {
+//     return (dispatch) => {
+//       return axios
+//         .post(`${process.env.REACT_APP_API_URL}api/pins/`, {userId, lat, long})
+//         .then((res) => {
+//             dispatch({
+//                 type: ADD_PIN,
+//                 payload: {
+//                     userId, lat, long
+//                 }
+//             })
+//         })
+//         .catch((err) => console.log(err.response))
+//     };
+// };
 
 
 export const deletePost = (pinId, userId) => {

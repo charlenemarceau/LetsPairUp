@@ -47,6 +47,7 @@ function App() {
           <Switch>
             {!uid ? (
               <>
+              <Route path="/" exact component={Login} />
               <Route path="/login" exact component={Login}/>
               <Route path="/register" exact component={Register}/></>
             ) : ( 

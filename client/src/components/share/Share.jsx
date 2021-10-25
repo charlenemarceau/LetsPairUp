@@ -75,10 +75,10 @@ function Share() {
                             <span className="shareOptionText">Image ou vidéo</span>
                             <input type="file" name="file" id="file" accept=".jpg, .png, .jpeg" style={{display:"none"}} onChange={(e) => handlePicture(e)}/>
                         </label>
-                        <div className="shareOption">
+                        {/* <div className="shareOption">
                             <LocationOnOutlined className='shareIcon'/>
                             <span className="shareOptionText">Localisation</span>
-                        </div>
+                        </div> */}
                     </div>
                     { !isEmpty(error.format) && <p className='error'>{error.format}</p>}
                     { !isEmpty(error.maxSize) && <p className='error'>{error.maxSize}</p>}
