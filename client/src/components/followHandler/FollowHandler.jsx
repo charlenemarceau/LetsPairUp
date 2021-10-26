@@ -32,13 +32,13 @@ function FollowHandler({ idToFollow, type }) {
         <>
         {isFollowed && !isEmpty(userData) && (
          <span onClick={handleUnfollow}>
-           { type === "suggestion" && <button className="unfollow-btn">Followed</button>}
+           { type === "suggestion" && <button className="unfollow-btn">Suivi</button>}
            { type === "card" && <CheckCircle alt="followed"/>}
         </span>   
         )}
         {isFollowed === false && !isEmpty(userData) && (
             <span onClick={handleFollow}>
-            { type === "suggestion" && <button className="follow-btn">Follow</button>}
+            { type === "suggestion" && <button className="follow-btn">Suivre</button>}
            { type === "card" && <CheckCircleOutline alt="follow"/>}
         </span>  
         )}

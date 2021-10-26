@@ -13,7 +13,7 @@ function Follow() {
 
     return (
         <div className='followContainer'>
-            <h3 className="rightbarTitle">Abonnements</h3>
+            <h3 className="rightbarTitle">Mes Abonnements</h3>
             <h4 onClick={() => setFollowingPopup(true) & setFollowersPopup(false)}>Abonnements : {userData.following ? userData.following.length - 1: "0"}</h4>
             <h4 onClick={() => setFollowersPopup(true) & setFollowingPopup(false)}>Abonnés : {userData.followers ? userData.followers.length - 1: "0"}</h4>
 

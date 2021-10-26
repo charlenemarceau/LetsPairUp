@@ -1,17 +1,27 @@
 import "./profile.css";
 import Topbar from "../../components/topbar/Topbar";
 import SidebarProfil from "../../components/sidebar/SidebarProfil";
-import React, {useState, useContext } from 'react';
-import { useSelector } from "react-redux";
-import { UidContext } from '../../components/AppContext';
+import React, { useState, useContext, useEffect } from "react";
+import { UidContext } from "../../components/AppContext";
 import UpdateProfil from "../../components/profil/UpdateProfil";
 import Thread from "../../components/thread/Thread";
 import RightbarProfil from "../../components/rightbar/rightbarProfil";
+import { useParams } from "react-router";
+import axios from "axios";
 
-export default function Profile() {
-  const userData = useSelector((state) => state.userReducer)
+export default function AProfile() {
+  const [user, setUser] = useState({});
+  const username = useParams().username;
   const uid = useContext(UidContext);
   const [updateProfilModal, setUpdateProfilModal] = useState(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await axios.get(`/users?username=${username}`);
+      setUser(res.data);
+    };
+    fetchUser();
+  }, [username]);
 
   return (
     <>
@@ -22,30 +32,31 @@ export default function Profile() {
           <div className="profileRightTop">
             <div className="profileCover">
               <div className="profileCoverImg">
-              <img className="profileUserImg" src={userData.avatar} alt=""/>
-            <div className="profileInfo">
-                <h4 className="profileInfoName">{userData.username}</h4>
-                <span className="profileInfoDesc">{userData.bio}</span>
-                {uid === userData._id && (
-                  <button className='changeProfilButton profile' onClick={() => setUpdateProfilModal(true)}>
-                    Changer votre profil
-                  </button> )}
-                  { updateProfilModal && (
-                    < UpdateProfil />
+                <img className="profileUserImg" src={user.avatar} alt="" />
+                <div className="profileInfo">
+                  <h4 className="profileInfoName">{user.username}</h4>
+                  <span className="profileInfoDesc">{user.bio}</span>
+                  {uid === user._id && (
+                    <button
+                      className="changeProfilButton profile"
+                      onClick={() => setUpdateProfilModal(true)}
+                    >
+                      Changer votre profil
+                    </button>
                   )}
-            </div>
+                  {updateProfilModal && <UpdateProfil />}
+                </div>
               </div>
             </div>
           </div>
           <div className="profileRightBottom">
-            <Thread username={userData.username}/>
+            <Thread username={user.username} />
             <div className="profilRight">
-          < RightbarProfil />
+              <RightbarProfil />
+            </div>
           </div>
-          </div>
-        </div> 
-          
+        </div>
       </div>
-      </>
+    </>
   );
 }

@@ -27,8 +27,8 @@
     border-radius: 15px;
     position: absolute;
     display: flex;
-    transform: translateX(100%);
-    right: (100%);
+    transform: translateX(-150%);
+    right: -50%;
     max-height: 350px;
     overflow-y: scroll;
     overflow-x: hidden;

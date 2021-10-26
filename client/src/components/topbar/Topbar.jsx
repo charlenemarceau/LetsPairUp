@@ -37,7 +37,7 @@ function Topbar() {
                     <span className="topbarIconBadge">1</span>
                   </div>
                 </div>
-                <NavLink to={`/profil`}>
+                <NavLink to={`/profil${userData.username}`}>
                 <img src={userData.avatar} alt="" className='topbarImg' />
                 </NavLink>
                 <Logout/>

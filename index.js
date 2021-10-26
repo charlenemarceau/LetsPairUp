@@ -16,6 +16,7 @@ const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
 const pinRoute = require("./routes/pins");
+const categoriesRoute = require('./routes/category');
 const questionRoute = require("./routes/questions");
 const uploadRoute = require('./routes/upload');
 const { checkUser, requireAuth} = require("./middleware/auth.middleware")
@@ -57,6 +58,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/pins", pinRoute);
 app.use("/api/questions", questionRoute);
+app.use("/api/categories", categoriesRoute);
 app.use("/api/upload", upload.single('file'), uploadRoute);
 
 mongoose.connect(process.env.MONGO_URL, {

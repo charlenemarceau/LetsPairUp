@@ -118,7 +118,9 @@ function Post( {post} ) {
                     </span>
                     <div className="CommentsContainer">
                         {showComments && (
-                            <Comments post={post} />
+                            <>
+                            <div onClick={() => setShowComments(!showComments)}>&#10006;</div>
+                            <Comments post={post} /></>
                         )}
                     </div>
                         {/* // {post.comments ? post.comments.length : 0}{" "}

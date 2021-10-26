@@ -86,3 +86,31 @@
 .rightbarFollowButton:focus {
   outline: none;
 }
+
+.CategoryContainer {
+  width: 250px;
+  margin: 20px 0 0 10px;
+}
+
+.CategoryContainer h3 {
+  text-align: center;
+}
+
+.sidebarListCat {
+  background: var(--pale-blue-color);
+  border-radius: 15px;
+  padding-top: 27px;
+}
+
+.CategoryWrapper {
+  margin-top: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 400px;
+  list-style: none;
+  font-size: 18px;
+  font-weight: 600;
+}

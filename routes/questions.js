@@ -2,18 +2,41 @@ const router = require("express").Router();
 const Question = require("../models/Question");
 const User = require("../models/User");
 
-
-
 // read questions 
-router.get("/", (req, res) => {
-    Question.find((err, docs) => {
-      if (!err) {
-        res.send(docs);
+// router.get("/", (req, res) => {
+//     Question.find((err, docs) => {
+//       if (!err) {
+//         res.send(docs);
+//       } else {
+//         console.log(err)
+//       }
+//     }).sort({createdAt: -1})
+//   });
+
+// GET ALL QUESTIONS BY CAT 
+//GET ALL POSTS
+router.get("/", async (req, res) => {
+    const username = req.query.user;
+    const catName = req.query.cat;
+    try {
+      let questions;
+      if (username) {
+        questions = await Question.find({ username });
+      } else if (catName) {
+        questions = await Question.find({
+          categories: {
+            $in: [catName],
+          },
+        });
       } else {
-        console.log(err)
+        questions = await Question.find();
       }
-    }).sort({createdAt: -1})
+      res.status(200).json(questions);
+    } catch (err) {
+      res.status(500).json(err);
+    }
   });
+
 
 // create a question
 router.post('/', async (req, res) => {

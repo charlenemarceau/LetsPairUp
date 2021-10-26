@@ -3,12 +3,13 @@ import './sidebar.css';
 import { HelpOutlineOutlined, CardTravelOutlined, PersonOutlineOutlined, ChatOutlined, MapOutlined, InfoOutlined } from '@material-ui/icons';
 import {NavLink} from "react-router-dom";
 import { UidContext } from "../AppContext";
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Follow from '../follow/Follow';
+
 
 function SidebarHome() {
     const uid = useContext(UidContext); // get the context
-    // const userData = useSelector((state) => state.userReducer); // get the data from the userReducer
+    const userData = useSelector((state) => state.userReducer);
   
     return (
         <div className='sidebar'>
@@ -17,7 +18,8 @@ function SidebarHome() {
                     { uid ? (
                     <li className="sidebarListItem">
                         < PersonOutlineOutlined className='sidebarIcon' />
-                        <NavLink exact to="/profil" style={{textDecoration:"none"}}>
+                        <NavLink to={`/profil${userData.username}`}
+                 style={{textDecoration:"none"}}>
                             <span className="sidebarListItemText">Profil</span>
                         </NavLink>
                     </li>
@@ -47,7 +49,7 @@ function SidebarHome() {
                     </li>
                     <li className="sidebarListItem">
                         < InfoOutlined className='sidebarIcon' />
-                        <NavLink to="/Advice" style={{textDecoration:"none"}}>
+                        <NavLink to="/conseils" style={{textDecoration:"none"}}>
                         <span className="sidebarListItemText">Les conseils</span>
                         </NavLink>
                     </li>

@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
           setDefaultsOnInsert: true},
         (err, docs) => {
           if (!err) return res.send(docs);
-          else return res.status(400).send({ message: err });
+          else return res.status(400).json({ message: err });
         }
       );
     } catch (err) {

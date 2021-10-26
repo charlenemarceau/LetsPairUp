@@ -82,10 +82,10 @@ function Share() {
                     </div>
                     { !isEmpty(error.format) && <p className='error'>{error.format}</p>}
                     { !isEmpty(error.maxSize) && <p className='error'>{error.maxSize}</p>}
-                    <button className="shareButton" type='submit'>Envoyer</button>
                     { message || postPicture ? (
                         <button className="cancelButton" onClick={cancelPost}>Annuler</button>
                     ) : null }
+                    <button className="shareButton" type='submit'>Envoyer</button>
                 </form>
             </div>
             </>

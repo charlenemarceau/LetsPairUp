@@ -5,10 +5,18 @@ const QuestionSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    ask: {
+    question: {
         type: String,
         trim: true,
         max: 500,
+    },
+    username: {
+        type: String, 
+        required:true,
+    },
+    categories: {
+        type: String,
+        required: true,
     },
     comments: {
         type: [{

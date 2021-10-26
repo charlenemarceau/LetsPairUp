@@ -10,11 +10,12 @@ import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
 import Profile from "./Pages/Profile/Profile";
 import Map from "./Pages/Map/Map";
-import Question from './Pages/Questions/Questions';
+import Questions from './Pages/Questions/Questions';
 import { useDispatch } from 'react-redux';
 import { UidContext } from './components/AppContext';
 import axios from "axios";
 import { getUser } from "./actions/user.actions";
+import Advice from "./Pages/Advice/Advice";
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
       <Router>
           <>
           <Switch>
+            {/** check if user is connected. User can't access the app if not connected */}
             {!uid ? (
               <>
               <Route path="/" exact component={Login} />
@@ -53,9 +55,11 @@ function App() {
             ) : ( 
               <>
               <Route path="/" exact component={Home} />
-              <Route path="/profil" exact component={Profile} />
+              <Route path="/profil:username" exact component={Profile} />
               <Route path="/map" exact component={Map} />
-              <Route path="/questions" exact component={Question} /></>
+              <Route path="/questions" exact component={Questions} />
+              <Route path="/conseils" exact component={Advice} />
+              </>
             )}
             <Redirect to="/" />
           </Switch>

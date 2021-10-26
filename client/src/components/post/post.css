@@ -184,9 +184,25 @@ width: 100%;
     background: var(--pale-blue-color);
     padding: 10px 20px;
     border-radius: 15px;
-    width: 85%;
+    width: 400PX;
+    display: flex;
+    flex-direction: column;
 }
 
+.comments-container .left-part {
+    display: flex;
+}
+
+.dateComment {
+    margin-left: 185px;
+}
+
+.textComment {
+    margin: 15px;
+    background: var(--pale-pink-color);
+    padding: 8px;
+    border-radius: 15px;
+}
 .comments-container .comment-textarea {
     background: var(--pale-blue-color);
     border: 1px solid var(--white-color);

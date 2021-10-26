@@ -58,12 +58,15 @@ router.delete("/:id", async (req, res) => {
   });
 
 //get a user
-router.get("/:id", async (req, res) => {
+router.get("/", async (req, res) => {
     // to either get the user by their userId or their username
-    const userId = req.params.id;
+    const userId = req.query.userId;
+    const username = req.query.username;
     try {
         // if userId, search for a user with the id, if not search for the user with username
-        const user = await User.findById(userId)
+        const user = userId
+        ? await User.findById(userId)
+        : await User.findOne({username:username});
         // to not render password and updated at
         const { password, updatedAt, ...other } = user._doc;
         res.status(200).json(other);

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getTrend } from "../../actions/post.actions";
 import { isEmpty } from "../../Utils";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import './trend.css'
 
 function Trend() {
@@ -27,7 +27,6 @@ function Trend() {
   return (
     <div className="trendingContainer">
       <h3>Tendance</h3>
-      <NavLink exact to="/trending">
         <ul>
           {trendingList.length &&
             trendingList.map((post) => {
@@ -47,11 +46,17 @@ function Trend() {
                     )}
                   </div>
                   <div className="trendingPostName">
+                  <Link to={`/profil${!isEmpty(usersData[0]) && usersData
+                    .map((user) => {
+                      if (user._id === post.posterId) return user.username;
+                      else return null;
+                  }).join("") }`}
+                 style={{textDecoration:"none"}}>
                     {usersData[0] && usersData.map((user) => {
                       if (user._id === post.posterId) {
                         return user.username;
                       } else { return null;}
-                    })}
+                    })}</Link>
                   </div>
                   <div className="trend-content">
                     <p>{post.message}</p>
@@ -60,7 +65,6 @@ function Trend() {
               );
             })}
         </ul>
-      </NavLink>
     </div>
   );
 };

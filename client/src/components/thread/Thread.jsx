@@ -12,6 +12,7 @@ export default function Thread({username}) {
     const [countThread, setCountThread] = useState(5);
     const dispatch = useDispatch();
     const posts = useSelector((state) => state.postReducer);
+    const userData = useSelector((state) => state.userReducer);
 
     const loadMore = () =>  { // infinite scroll
         if (window.innerHeight + document.documentElement.scrollTop + 1 >
@@ -33,7 +34,7 @@ export default function Thread({username}) {
     return (
         <div className='thread'>
             <div className="threadWrapper" >
-                <Share />
+                {(!username || username === userData.username) && <Share />}
                 {!isEmpty(posts[0]) && (
                     posts.map((post) => (
                         <Post key={post._id} post={post}  />

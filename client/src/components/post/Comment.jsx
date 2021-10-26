@@ -37,18 +37,18 @@ function Comments({post}) {
                               .join("")
                             }
                             alt="commenter-pic"/>  
+                            <div className="pseudo">
+                                <h3>{comment.commenterPseudo}</h3>
+                                { comment.commenterId !== userData._id && (
+                                    < FollowHandler idToFollow={comment.commenterId} type={'card'} />
+                                )}
+                            </div>
+                            <span className='dateComment'>{timestampParser(comment.timestamp)}</span>
                         </div>
                         <div className="right-part">
                             <div className="comment-header">
-                                <div className="pseudo">
-                                    <h3>{comment.commenterPseudo}</h3>
-                                    { comment.commenterId !== userData._id && (
-                                        < FollowHandler idToFollow={comment.commenterId} type={'card'} />
-                                    )}
-                                </div>
-                                <span>{timestampParser(comment.timestamp)}</span>
                             </div>
-                            <p>{comment.text}</p>
+                            <p className='textComment'>{comment.text}</p>
                             <DeleteComment comment={comment} postId={post._id } className="delete-comment-btn"/>
                         </div>
 
