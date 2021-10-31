@@ -2,10 +2,12 @@ import React, {useState} from 'react';
 import UploadImg from './UploadImg';
 import { dateParser } from '../../Utils';
 import { useSelector } from "react-redux";
-import { CloseOutlined } from '@material-ui/icons'
-import './update.css'
+import { CloseOutlined } from '@material-ui/icons';
+import './update.css';
 import { useDispatch } from 'react-redux';
-import { updateBio } from '../../actions/user.actions'
+import { updateBio } from '../../actions/user.actions';
+import { deleteUser } from '../../actions/user.actions';
+import {useHistory} from 'react-router-dom'
 
 const UpdateProfil = () => {
     const [bio, setBio] = useState('');
@@ -14,10 +16,19 @@ const UpdateProfil = () => {
     const [updateProfilModal, setUpdateProfilModal] = useState(true);
     const error = useSelector((state) => state.errorReducer.userError);
     const dispatch = useDispatch();
+    let history = useHistory();
 
     const handleUpdate =  () => {
         dispatch(updateBio(userData._id, bio));
         setUpdateForm(false);
+        window.location.reload();
+
+    }
+
+    const handleDelete =  () => {
+        dispatch(deleteUser(userData._id));
+        history.push("/login");
+        window.location.reload();
     }
 
     return (
@@ -52,6 +63,7 @@ const UpdateProfil = () => {
                         )}
                         < br/>
                         <h4>Membre depuis le : { dateParser(userData.createdAt)}</h4>
+                        <button onClick={handleDelete} className='changeBioButton'>Supprimer le compte</button>
                     </div>
                 </div>
                 

@@ -39,25 +39,27 @@ export const addQuestion = (data) => {
       return axios
         .post(`${process.env.REACT_APP_API_URL}api/questions/`, data)
         .then((res) => {
-          
+            dispatch({ 
+                type: GET_QUESTIONS,
+                payload: "" });
         })
         .catch((err) => console.log(err.response))
     };
 };
 
 
-export const updateQuestion = (questionId, message, userId) => {
+export const updateQuestion = (questionId, question, userId) => {
     return (dispatch) => {
         return axios ({
             method:'put',
             url: `${process.env.REACT_APP_API_URL}api/questions/${questionId}`,
-            data: {message, userId}
+            data: {question, userId}
         })
         .then((res) => {
             dispatch({
                 type: UPDATE_QUESTION,
                 payload: {
-                    message, questionId, userId
+                    question, questionId, userId
                 }
             })
         })
@@ -65,7 +67,7 @@ export const updateQuestion = (questionId, message, userId) => {
     };
 };
 
-export const deletePost = (questionId, userId) => {
+export const deleteQuestion = (questionId, userId) => {
     return (dispatch) => {
         return axios ({
             method:'delete',

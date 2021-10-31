@@ -7,6 +7,12 @@
     display: flex;
 }
 
+.helpMap {
+    text-align: center;
+    margin: 5px;
+    color: var(--blue-color);
+}
+
 .left-part-map {
     width: 340px;
 }

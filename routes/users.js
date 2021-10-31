@@ -43,11 +43,11 @@ router.put("/:id", async (req, res) => {
   });
 
 //delete user
-router.delete("/:id", async (req, res) => {
+router.delete("/profil:username", async (req, res) => {
     // check if user is changing their own informations or if the user is admin
-    if (req.body.userId === req.params.id || req.body.isAdmin) {
+    if (req.body.username === req.params.username || req.body.isAdmin) {
         try {
-            await User.findByIdAndDelete(req.params.id);
+            await User.findByIdAndDelete(req.params.username);
             res.status(200).json("Account has been deleted.");
         } catch (err) {
             return res.status(500).json(err);

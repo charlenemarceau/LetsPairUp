@@ -24,7 +24,7 @@ function Map({ pin }) {
   const dispatch = useDispatch();
   const [viewport, setViewport] = useState({
     width: "73.8vw",
-    height: "100vh",
+    height: "85vh",
     latitude: 37.09024,
     longitude: -95.712891,
     zoom: 3,
@@ -70,6 +70,8 @@ function Map({ pin }) {
   };
 
   return (
+    <>
+    <h4 className="helpMap">Toi aussi marque ta position pour que des Au Pairs puissent te contacter !</h4>
     <ReactMapGL
       className="mapComponent"
       {...viewport}
@@ -87,7 +89,7 @@ function Map({ pin }) {
       />
       {!isEmpty(pinsData[0]) &&
         pinsData.map((pin) => (
-          <>
+          <div key={pin}>
             <Marker
               latitude={pin.lat}
               longitude={pin.long}
@@ -164,7 +166,7 @@ function Map({ pin }) {
                 </div>
               </Popup>
             )}
-          </>
+          </div>
         ))}
       {newPlace && (
         <>
@@ -206,6 +208,7 @@ function Map({ pin }) {
         </>
       )}
     </ReactMapGL>
+    </>
   );
 }
 

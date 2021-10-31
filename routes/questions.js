@@ -3,15 +3,15 @@ const Question = require("../models/Question");
 const User = require("../models/User");
 
 // read questions 
-// router.get("/", (req, res) => {
-//     Question.find((err, docs) => {
-//       if (!err) {
-//         res.send(docs);
-//       } else {
-//         console.log(err)
-//       }
-//     }).sort({createdAt: -1})
-//   });
+router.get("/", (req, res) => {
+    Question.find((err, docs) => {
+      if (!err) {
+        res.send(docs);
+      } else {
+        console.log(err)
+      }
+    }).sort({createdAt: -1})
+  });
 
 // GET ALL QUESTIONS BY CAT 
 //GET ALL POSTS

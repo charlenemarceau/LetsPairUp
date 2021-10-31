@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import "./share.css";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "../../Utils";
-import { LocationOnOutlined, PermMediaOutlined, CancelOutlined} from '@material-ui/icons';
+import { PermMediaOutlined, CancelOutlined} from '@material-ui/icons';
 import { addPost, getPosts } from "../../actions/post.actions";
-
-
 
 function Share() {
     const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +13,6 @@ function Share() {
     const userData = useSelector((state) => state.userReducer);
     const error = useSelector((state) => state.errorReducer.postError);
     const dispatch = useDispatch();
-
 
     const handlePost = async () => {
         if (message || postPicture) {
@@ -27,23 +24,22 @@ function Share() {
           await dispatch(addPost(data));
           dispatch(getPosts());
           cancelPost();
-        //   window.location.reload();
         } else {
           alert("Veuillez entrer un message")
         }
       };
      
-      const handlePicture = (e) => {
-          // create a link for the image
-        setPostPicture(URL.createObjectURL(e.target.files[0]));
-        setFile(e.target.files[0]);
-      }; 
-    
-      const cancelPost = () => {
-        setMessage("");
-        setPostPicture("");
-        setFile("");
-      };
+    const handlePicture = (e) => {
+        // create a link for the image
+      setPostPicture(URL.createObjectURL(e.target.files[0]));
+      setFile(e.target.files[0]);
+    }; 
+
+    const cancelPost = () => {
+      setMessage("");
+      setPostPicture("");
+      setFile("");
+    };
 
     useEffect(() => {
         if (!isEmpty(userData)) setIsLoading(false);
@@ -58,7 +54,8 @@ function Share() {
             <div className="shareWrapper">
                 <div className="shareTop">
                     <img className='shareProfileImg' src={userData.avatar} alt="" />
-                    <input placeholder={"Quoi de neuf " + userData.username + " ?"} className='shareInput' onChange={((e) => setMessage(e.target.value))} value={message} />
+                    <input placeholder={"Quoi de neuf " + userData.username + " ?"} className='shareInput' 
+                    onChange={((e) => setMessage(e.target.value))} value={message} />
                 </div>
                 <hr className="shareHr" />
                 {file && (
@@ -73,12 +70,9 @@ function Share() {
                         <label htmlFor='file' className="shareOption">
                             <PermMediaOutlined className='shareIcon'/>
                             <span className="shareOptionText">Image ou vidéo</span>
-                            <input type="file" name="file" id="file" accept=".jpg, .png, .jpeg" style={{display:"none"}} onChange={(e) => handlePicture(e)}/>
+                            <input type="file" name="file" id="file" accept=".jpg, .png, .jpeg" style={{display:"none"}}
+                             onChange={(e) => handlePicture(e)}/>
                         </label>
-                        {/* <div className="shareOption">
-                            <LocationOnOutlined className='shareIcon'/>
-                            <span className="shareOptionText">Localisation</span>
-                        </div> */}
                     </div>
                     { !isEmpty(error.format) && <p className='error'>{error.format}</p>}
                     { !isEmpty(error.maxSize) && <p className='error'>{error.maxSize}</p>}

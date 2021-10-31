@@ -8,10 +8,13 @@ import Thread from "../../components/thread/Thread";
 import RightbarProfil from "../../components/rightbar/rightbarProfil";
 import { useParams } from "react-router";
 import axios from "axios";
+import { useSelector} from 'react-redux';
+
 
 export default function AProfile() {
   const [user, setUser] = useState({});
   const username = useParams().username;
+  const userData = useSelector((state) => state.userReducer) // get user data
   const uid = useContext(UidContext);
   const [updateProfilModal, setUpdateProfilModal] = useState(false);
 
@@ -36,7 +39,7 @@ export default function AProfile() {
                 <div className="profileInfo">
                   <h4 className="profileInfoName">{user.username}</h4>
                   <span className="profileInfoDesc">{user.bio}</span>
-                  {uid === user._id && (
+                  {(uid === user._id || userData.isAdmin === true) && (
                     <button
                       className="changeProfilButton profile"
                       onClick={() => setUpdateProfilModal(true)}

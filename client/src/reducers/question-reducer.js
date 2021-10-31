@@ -1,4 +1,4 @@
-import { DELETE_QUESTION, GET_QUESTIONS, UPDATE_QUESTION, DELETE_COMMENT } from "../actions/post.actions"
+import { DELETE_QUESTION, GET_QUESTIONS, UPDATE_QUESTION, DELETE_COMMENT } from "../actions/question.action"
 const initialState = {};
 
 export default function postReducer(state = initialState, action) {
@@ -10,7 +10,7 @@ export default function postReducer(state = initialState, action) {
                 if (question._id === action.payload.questionId) {
                     return {
                         ...question,
-                        message: action.payload.message
+                        question: action.payload.question
                     };
                 } else {
                     return question;

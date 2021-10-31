@@ -5,8 +5,6 @@ import { isEmpty } from "../../Utils";
 import { PermMediaOutlined, CancelOutlined} from '@material-ui/icons';
 import { addQuestion, getQuestions } from '../../actions/question.action';
 
-
-
 function Ask() {
     const [isLoading, setIsLoading] = useState(true);
     const [question, setQuestion] = useState("");
@@ -16,7 +14,6 @@ function Ask() {
     const userData = useSelector((state) => state.userReducer);
     const error = useSelector((state) => state.errorReducer.postError);
     const dispatch = useDispatch();
-
 
     const handlePost = async () => {
         if (question || questionPicture) {
@@ -44,9 +41,11 @@ function Ask() {
       const handleCategory = (e) => {
           setCategory(e.target.value);
       }
+
       const cancelPost = () => {
         setQuestion("");
         setQuestionPicture("");
+        setCategory("");
         setFile("");
       };
 

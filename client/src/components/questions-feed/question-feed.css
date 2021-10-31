@@ -5,3 +5,8 @@
 .questionFeedWrapper {
     padding: 20px;
 }
+
+.questionH2 {
+    text-align: center;
+    margin: 15px;
+}

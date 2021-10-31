@@ -9,7 +9,6 @@ export default function RightbarHome() {
       <>
         <div className="rightbar">
           < Trend />
-          < FriendsHint />
         </div>
       </>
     );

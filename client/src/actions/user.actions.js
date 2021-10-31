@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export const GET_USER = "GET_USER";
 export const GET_A_USER = "GET_USER";
+export const DELETE_USER = "DELETE_USER";
 export const UPLOAD_PICTURE = "UPLOAD_PICTURE";
 export const UPDATE_BIO = "UPDATE_BIO";
 export const FOLLOW_USER = "FOLLOW_USER";
@@ -86,5 +87,22 @@ export const unfollowUser = (userId, idToUnfollow) => {
             })
         })
         .catch((err) => console.log(err))
+    }
+}
+
+export const deleteUser = (username) => {
+    return (dispatch) => {
+        return axios({
+            method: 'delete',
+            url: `${process.env.REACT_APP_API_URL}api/users/profil?username=` + username, 
+            data: { username }
+        })
+        .then((res) => {
+            dispatch ({
+                type: DELETE_USER,
+                payload: {username}
+            })
+        })
+        .catch((err) => console.log(err));
     }
 }

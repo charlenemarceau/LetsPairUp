@@ -29,9 +29,11 @@ function Post( {post} ) {
     const handleMenuClose = () => {
         setMoreOptions(false);
     }
-
+    // const to handle the update.
+    // if the post text is updated, fetch updatePost function and 
+    // set isUpdated to false which means view will go back to iniatial state
     const updateItem = () => {
-        if (textUpdate) {
+        if (textUpdate) { 
             dispatch(updatePost(post._id, textUpdate));
         }
         setIsUpdated(false);
@@ -43,11 +45,11 @@ function Post( {post} ) {
             {isLoading ? (
                 <i className='fas fa-spinner fa-spin'></i>
             ) : (
-
             <>
             <div className="postWrapper">
                 <div className="postTop">
                     <div className="postTopLeft">
+                        {/* fetching user data in a map in order to render user's avatar */}
                         <img src={!isEmpty(usersData[0]) && usersData
                         .map((user) => {
                             if (user._id === post.posterId) {
@@ -57,6 +59,7 @@ function Post( {post} ) {
                         }).join("")} alt="" className='postProfileImg'/>
                         <span className="postUserName">
                             <h3>
+                            {/* fetching user data in a map in order to render user's username */}
                             {!isEmpty(usersData[0]) && usersData
                                 .map((user) => {
                                     if (user._id === post.posterId) return user.username;
@@ -71,7 +74,8 @@ function Post( {post} ) {
                     </div>
                     <div className="postTopRight">
                         <span className="postDate">{dateParserPost(post.createdAt)}</span>
-                        {userData._id === post.posterId && (
+                        {/** if current user is the poster user or the admin, options for editing and deleting post will be rendered */}
+                        {(userData._id === post.posterId || userData.isAdmin === true ) && (
                             <>
                                 { moreOptions && (
                                     <>
@@ -95,14 +99,13 @@ function Post( {post} ) {
                 </div>
                 <div className="postCenter">
                     {isUpdated === false && <span className="postText">{post?.message}</span>}
+                    {/** if the post is being editing */}
                     {isUpdated && (
                         <div className="update-post">
                             <textarea defaultValue={post?.message} onChange={((e) => setTextUpdate(e.target.value))}/>
-                            {/* <div className="button-container"> */}
                                 <button className="btn" onClick={updateItem}>
                                     Valider modification
                                 </button>
-                            {/* </div> */}
                         </div>
                     )}
                     

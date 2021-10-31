@@ -5,6 +5,7 @@ import { dateParserPost, isEmpty } from '../../Utils';
 import FollowHandler from '../followHandler/FollowHandler';
 import Comments from '../post/Comment';
 import { updateQuestion } from '../../actions/question.action';
+import DeleteQuestion from './DeleteQuestion'
 
 function QuestionShare( {question} ) {
     const [isLoading, setIsLoading] = useState(true);
@@ -65,18 +66,19 @@ function QuestionShare( {question} ) {
                             <FollowHandler idToFollow={question.userId} type={"card"}/>
                             )}
                         </span>
+                    <span className="postText">{question?.categories}</span>
                     </div>
                     <div className="postTopRight">
                         <span className="postDate">{dateParserPost(question.createdAt)}</span>
-                        {userData._id === question.userId && (
+                        {(userData._id === question.userId || userData.isAdmin === true) && (
                             <>
                                 { moreOptions && (
                                     <>
                                     <div className="moreOptionsContainer">
                                     <div onClick={handleMenuClose} className="moreOptions-close">&#10006;</div>
                                     <div className="moreOptions">
-                                        {/* < Edit onClick={() => setIsUpdated(!isUpdated)}/>
-                                        < DeletePost id={post._id}/> */}
+                                        < Edit onClick={() => setIsUpdated(!isUpdated)}/>
+                                        < DeleteQuestion id={question._id}/>
                                     </div>
                                     </div>
                                     </>
@@ -91,10 +93,10 @@ function QuestionShare( {question} ) {
                     </div>
                 </div>
                 <div className="postCenter">
-                    {isUpdated === false && <span className="postText">{question?.message}</span>}
+                    {isUpdated === false && <span className="postText">{question?.question}</span>}
                     {isUpdated && (
                         <div className="update-post">
-                            <textarea defaultValue={question?.message} onChange={((e) => setTextUpdate(e.target.value))}/>
+                            <textarea defaultValue={question?.question} onChange={((e) => setTextUpdate(e.target.value))}/>
                             {/* <div className="button-container"> */}
                                 <button className="btn" onClick={updateItem}>
                                     Valider modification

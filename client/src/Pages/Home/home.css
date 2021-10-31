@@ -5,6 +5,7 @@
 
 .rightbar .trendingContainer {
     margin: 20px 15px;
+    position: fixed;
 }
 .rightbar .trendingContainer h3 {
     margin: 5px;

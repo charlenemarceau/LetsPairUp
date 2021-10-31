@@ -51,7 +51,12 @@ function App() {
               <>
               <Route path="/" exact component={Login} />
               <Route path="/login" exact component={Login}/>
-              <Route path="/register" exact component={Register}/></>
+              <Route path="/register" exact component={Register}/>
+              <Route path="/conseils" exact component={Advice} />
+              <Route path="/questions" exact component={Login} />
+              <Route path="/map" exact component={Login} />
+              <Route path="/profil:username" exact component={Login} />
+              </>
             ) : ( 
               <>
               <Route path="/" exact component={Home} />
