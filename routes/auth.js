@@ -5,7 +5,7 @@ const jwt = require ("jsonwebtoken");
 const { registerErrors, logInErrors } = require("../Utils/errors.utils");
 
 
-const maxAge = 3 * 24 * 60 * 60 *1000;
+const maxAge = 3 * 24 * 60 * 60 * 500;
 
 const createToken = (id) => {
     return jwt.sign({id}, process.env.TOKEN_SECRET, {
@@ -53,20 +53,6 @@ router.post("/login", async (req, res) => {
        res.status(200).send({errors});
     }
 })
-
-
-// router.post("/login", async (req, res) => {
-//     const { email, password } = req.body;
-//     try {
-//         const user = await User.login(email, password);
-//         console.log(user)
-//         const token = createToken(user._id);
-//         res.cookie('jwt', token, {httpOnly: true, maxAge});
-//         res.status(200).json({user: user._id})
-//     } catch(err) {
-//         res.status(400).json(err);
-//     }
-// })
 
 
 //LOG OUT

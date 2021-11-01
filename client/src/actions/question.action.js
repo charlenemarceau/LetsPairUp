@@ -11,6 +11,7 @@ export const DELETE_QUESTION = "DELETE_QUESTION";
 export const ADD_COMMENT = "ADD_COMMENT";
 export const EDIT_COMMENT = "EDIT_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
+export const GET_POST_ERRORS = "GET_POST_ERRORS";
 
 export const getQuestions = (num) => {
     return (dispatch) => {
@@ -39,10 +40,16 @@ export const addQuestion = (data) => {
       return axios
         .post(`${process.env.REACT_APP_API_URL}api/questions/`, data)
         .then((res) => {
-            dispatch({ 
-                type: GET_QUESTIONS,
-                payload: "" });
-        })
+            if (res.data.errors) {
+              dispatch({ 
+                  type: GET_POST_ERRORS,
+                  payload: res.data.errors });
+            } else {
+              dispatch({ 
+                  type: GET_POST_ERRORS,
+                  payload: "" });
+            }
+          })
         .catch((err) => console.log(err.response))
     };
 };

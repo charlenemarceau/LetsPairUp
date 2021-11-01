@@ -3,16 +3,16 @@ import { MoreVert, Edit, Comment } from '@material-ui/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { dateParserPost, isEmpty } from '../../Utils';
 import FollowHandler from '../followHandler/FollowHandler';
-import Comments from '../post/Comment';
 import { updateQuestion } from '../../actions/question.action';
 import DeleteQuestion from './DeleteQuestion'
+import QuestionComments from './QuestionComments';
 
 function QuestionShare( {question} ) {
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdated, setIsUpdated] = useState(false);
     const [textUpdate, setTextUpdate] = useState(null);
     const [moreOptions, setMoreOptions] = useState(false);
-    const [showComments, setShowComments] = useState(false);
+    const [showAnswer, setShowAnswer] = useState(false);
     const usersData = useSelector((state) => state.usersReducer) // get users data
     const userData = useSelector((state) => state.userReducer) // get user data
     const dispatch = useDispatch()
@@ -110,11 +110,11 @@ function QuestionShare( {question} ) {
                 <div className="postBottom">
                     <div className="postBottomRight">
                     <span className="postCommentText">
-                        < Comment onClick={() => setShowComments(!showComments)} className="CommentButton" />
+                        < Comment onClick={() => setShowAnswer(!showAnswer)} className="CommentButton" />
                     </span>
                     <div className="CommentsContainer">
-                        {showComments && (
-                            <Comments question={question} />
+                        {showAnswer && (
+                            <QuestionComments question={question} />
                         )}
                     </div>
                         {/* // {question.comments ? question.comments.length : 0}{" "}

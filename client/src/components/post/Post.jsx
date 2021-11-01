@@ -80,12 +80,12 @@ function Post( {post} ) {
                                 { moreOptions && (
                                     <>
                                     <div className="moreOptionsContainer">
-                                    <div onClick={handleMenuClose} className="moreOptions-close">&#10006;</div>
-                                    <div className="moreOptions">
-                                        < Edit onClick={() => setIsUpdated(!isUpdated)}/>
-                                        < DeletePost id={post._id}/>
-                                    </div>
-                                    </div>
+                                        <div onClick={handleMenuClose} className="moreOptions-close">&#10006;</div>
+                                            <div className="moreOptions">
+                                                < Edit onClick={() => setIsUpdated(!isUpdated)}/>
+                                                < DeletePost id={post._id}/>
+                                            </div>
+                                        </div>
                                     </>
                                 )}
                                 { !moreOptions && (
@@ -122,7 +122,7 @@ function Post( {post} ) {
                     <div className="CommentsContainer">
                         {showComments && (
                             <>
-                            <div onClick={() => setShowComments(!showComments)}>&#10006;</div>
+                            <div className="close-comment" onClick={() => setShowComments(!showComments)}>&#10006;</div>
                             <Comments post={post} /></>
                         )}
                     </div>

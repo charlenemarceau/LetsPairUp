@@ -10,7 +10,7 @@ export default function postReducer(state = initialState, action) {
                 if (post._id === action.payload.postId) {
                     return {
                         ...post,
-                        likes: [action.payload.userId, ...post.likes],
+                        likers: [action.payload.userId, ...post.likers],
                     }
                 } else return post;
             });
@@ -19,7 +19,7 @@ export default function postReducer(state = initialState, action) {
               if (post._id === action.payload.postId) {
                   return {
                     ...post,
-                    likes: post.likes.filter((id) => id !== action.payload.userId),
+                    likers: post.likers.filter((id) => id !== action.payload.userId),
                   };
               }
               return post;

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addComment, getPosts } from '../../actions/post.actions';
+import { addComment, getQuestions } from '../../actions/question.action';
 import { isEmpty, timestampParser } from '../../Utils';
 import FollowHandler from '../followHandler/FollowHandler';
 import DeleteComment from './DeleteComment';
 
 
-function Comments({post}) {
+function QuestionComments({question}) {
     const [text, setText] = useState("");
     const usersData = useSelector((state) => state.usersReducer);
     const userData = useSelector((state) => state.userReducer);
@@ -16,15 +16,15 @@ function Comments({post}) {
         e.preventDefault();
 
         if (text) {
-            dispatch(addComment(post._id, userData._id, text, userData.pseudo))
-            .then(() => dispatch(getPosts()))
+            dispatch(addComment(question._id, userData._id, text, userData.pseudo))
+            .then(() => dispatch(getQuestions()))
             .then(() => setText(''));
         }
     }
 
     return (
         <div className="comments-container">
-            {post.comments.map((comment) => {
+            {question.comments.map((comment) => {
                 return (
                     <div className={comment.commenterId === userData._id ? 
                         "comment-container client" : "comment-container"} key={comment._id}>
@@ -48,7 +48,7 @@ function Comments({post}) {
                         <div className="right-part">
                             <div className="comment-header">
                             </div>
-                            <DeleteComment comment={comment} postId={post._id } className="delete-comment-btn"/>
+                            <DeleteComment comment={comment} questionId={question._id } className="delete-comment-btn"/>
                             <p className='textComment'>{comment.text}</p>
                         </div>
 
@@ -67,4 +67,4 @@ function Comments({post}) {
     )
 }
 
-export default Comments;
+export default QuestionComments;

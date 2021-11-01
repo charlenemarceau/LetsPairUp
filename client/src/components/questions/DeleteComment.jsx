@@ -1,20 +1,20 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { UidContext } from "../AppContext";
 import { useDispatch, useSelector} from "react-redux";
-import { deleteComment,  getPosts } from '../../actions/post.actions';
+import { deleteComment,  getQuestions } from '../../actions/question.action';
 import {Delete} from '@material-ui/icons';
 
 
 
-function DeleteComment({comment, postId}) {
+function DeleteComment({comment, questionId}) {
     const userData = useSelector((state) => state.userReducer) // get user data
     const [isAuthor, setIsAuthor] = useState(false);
     const uid = useContext(UidContext);
     const dispatch = useDispatch();
 
     const handleDelete = () => {
-        dispatch(deleteComment(postId, comment._id))
-        .then(() => dispatch(getPosts()));
+        dispatch(deleteComment(questionId, comment._id))
+        .then(() => dispatch(getQuestions()));
 
     }
     useEffect(() => {

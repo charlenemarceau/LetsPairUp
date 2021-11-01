@@ -167,6 +167,15 @@ textarea:focus {
 width: 100%;
 }
 
+.close-comment {
+    width: 15px;
+    float: right;
+    width: 13px;
+    right: 6px;
+    top: 5px;
+    position: absolute;
+}
+
 .left-part img {
     width: 32px;
     height: 32px;
@@ -227,4 +236,11 @@ width: 100%;
     cursor: pointer;
     color: white;
     float: right;
+}
+
+.edit-comment {
+    color: var(--blue-color);
+    float: right;
+    margin-right: 25px;
+    margin-top: 5px;
 }

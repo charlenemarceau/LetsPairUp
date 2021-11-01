@@ -41,14 +41,14 @@ export const getPosts = (num) => {
 export const likePost = (postId, userId) => {
     return (dispatch) => {
         return axios({
-            method:'put', 
+            method:'patch', 
             url: `${process.env.REACT_APP_API_URL}api/posts/${postId}/like`, 
             data: { userId}
         })
         .then((res) => {
             dispatch ({
                 type: LIKE_POST, 
-                payload: {userId}
+                payload: {postId, userId}
             })
         })
         .catch((err) => console.log(err))
@@ -58,14 +58,14 @@ export const likePost = (postId, userId) => {
 export const unlikePost = (postId, userId) => {
     return (dispatch) => {
         return axios({
-            method:'put', 
+            method:'patch', 
             url: `${process.env.REACT_APP_API_URL}api/posts/${postId}/unlike`, 
             data: { userId}
         })
         .then((res) => {
             dispatch ({
                 type: UNLIKE_POST, 
-                payload: {userId}
+                payload: {postId, userId}
             })
         })
         .catch((err) => console.log(err))
