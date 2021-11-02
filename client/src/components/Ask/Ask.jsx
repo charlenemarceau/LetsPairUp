@@ -8,7 +8,7 @@ import { addQuestion, getQuestions } from '../../actions/question.action';
 function Ask() {
     const [isLoading, setIsLoading] = useState(true);
     const [question, setQuestion] = useState("");
-    const [category, setCategory] = useState("");
+    const [categories, setCategories] = useState("");
     const [questionPicture, setQuestionPicture] = useState(null);
     const [file, setFile] = useState();
     const userData = useSelector((state) => state.userReducer);
@@ -20,7 +20,7 @@ function Ask() {
           const data = new FormData();
           data.append('userId', userData._id);
           data.append('question', question);
-          data.append('caterogy', category)
+          data.append('caterogies', categories)
           if (file) data.append("file", file);
 
           await dispatch(addQuestion(data));
@@ -39,13 +39,13 @@ function Ask() {
       }; 
     
       const handleCategory = (e) => {
-          setCategory(e.target.value);
+          setCategories({value: e.target.value});
       }
 
       const cancelPost = () => {
         setQuestion("");
         setQuestionPicture("");
-        setCategory("");
+        setCategories("");
         setFile("");
       };
 

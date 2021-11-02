@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { uploadPicture } from '../../actions/user.actions';
 import { isEmpty } from "../../Utils";
+import {useHistory} from 'react-router';
 
 
 
@@ -10,7 +11,7 @@ function UploadImg() {
     const dispatch = useDispatch();
     const userData = useSelector((state) => state.userReducer);
     const error = useSelector((state) => state.errorReducer.userError);
-
+    const history = useHistory();
     
     const handlePicture = (e) => {
         e.preventDefault();
@@ -20,7 +21,7 @@ function UploadImg() {
         data.append("file", file);
 
         dispatch(uploadPicture(data, userData._id));
-        window.location.reload()
+        history.push("/")
     }
     return (
         <form action="" onSubmit={handlePicture} className="upload-pic">

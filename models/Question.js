@@ -17,6 +17,7 @@ const QuestionSchema = new mongoose.Schema({
     categories: {
         type: String,
         required: true,
+        enum: ['FAMILLES', 'VISAS', 'VOYAGES', 'PROGRAMME', 'CREDITS', 'EDUCATION', 'ENFANTS', 'PRE DEPART']
     },
     comments: {
         type: [{
